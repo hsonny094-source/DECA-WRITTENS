@@ -45,6 +45,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50 shadow-md">
+      {/* Top Cluster Leaders Banner */}
+      <div className="bg-slate-950 border-b border-slate-800/80 px-4 py-1.5 text-center text-xs text-slate-300 flex items-center justify-center flex-wrap gap-1.5">
+        <span className="text-slate-400 font-medium">Cluster Leaders:</span>
+        <span className="font-semibold text-blue-300">Ronnie Agarwal</span>
+        <span className="text-slate-600">•</span>
+        <span className="font-semibold text-blue-300">Omar Ahmed</span>
+        <span className="text-slate-600">•</span>
+        <span className="font-semibold text-blue-300">Omar Dowidar</span>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Branding - Always Clickable */}
@@ -247,7 +257,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <BookOpen className="w-4 h-4" />
-            <span>Take Exam (Test Modes)</span>
+            <span>Take Exam</span>
           </button>
 
           <button

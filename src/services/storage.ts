@@ -10,70 +10,45 @@ const STORAGE_KEYS = {
   CUSTOM_TESTS: 'deca_custom_tests_v1',
 };
 
-// Seed initial users & sample test history
-function initializeSeedData() {
-  if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
-    const seedUsers: User[] = [
-      {
-        id: 'usr_leader_1',
-        username: 'advisor_smith',
-        name: 'Advisor Sarah Smith',
-        role: 'cluster_leader',
-        email: 'ssmith@school.edu',
-        createdAt: Date.now() - 30 * 86400000,
-      },
-      {
-        id: 'usr_student_1',
-        username: 'jordan_lee',
-        name: 'Jordan Lee',
-        role: 'student',
-        email: 'jordan.lee@students.edu',
-        createdAt: Date.now() - 14 * 86400000,
-      },
-      {
-        id: 'usr_student_2',
-        username: 'maya_patel',
-        name: 'Maya Patel',
-        role: 'student',
-        email: 'maya.patel@students.edu',
-        createdAt: Date.now() - 7 * 86400000,
-      },
-    ];
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(seedUsers));
+// Clean storage initialization without mock or test users
+function initializeStorage() {
+  try {
+    // Purge any legacy demo/mock records from past development
+    const rawUsers = localStorage.getItem(STORAGE_KEYS.USERS);
+    if (rawUsers) {
+      const parsed: User[] = JSON.parse(rawUsers);
+      const cleaned = parsed.filter(
+        u => u.username !== 'jordan_lee' && u.username !== 'maya_patel' && u.id !== 'usr_student_1' && u.id !== 'usr_student_2'
+      );
+      if (cleaned.length !== parsed.length) {
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(cleaned));
+      }
+    } else {
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
+    }
 
-    // Seed 2 completed exams for Jordan Lee to show dashboard in action
-    const pool = getCachedOrGeneratedPool();
-    const sampleQuestions = pool.slice(0, 100);
+    const rawExams = localStorage.getItem(STORAGE_KEYS.COMPLETED_EXAMS);
+    if (rawExams) {
+      const parsedExams: CompletedExam[] = JSON.parse(rawExams);
+      const cleanedExams = parsedExams.filter(
+        e => e.id !== 'exam_seed_1' && e.studentId !== 'usr_student_1' && e.studentName !== 'Jordan Lee'
+      );
+      if (cleanedExams.length !== parsedExams.length) {
+        localStorage.setItem(STORAGE_KEYS.COMPLETED_EXAMS, JSON.stringify(cleanedExams));
+      }
+    } else {
+      localStorage.setItem(STORAGE_KEYS.COMPLETED_EXAMS, JSON.stringify([]));
+    }
 
-    const answers1: Record<number, number> = {};
-    sampleQuestions.forEach((q, idx) => {
-      // simulate 86% correct
-      answers1[q.id] = idx % 7 === 0 ? (q.correctAnswer + 1) % 4 : q.correctAnswer;
-    });
-
-    const breakdown1 = calculateAreaBreakdown(sampleQuestions, answers1);
-    const score1 = sampleQuestions.filter(q => answers1[q.id] === q.correctAnswer).length;
-
-    const exam1: CompletedExam = {
-      id: 'exam_seed_1',
-      studentId: 'usr_student_1',
-      studentName: 'Jordan Lee',
-      examTitle: 'DECA Entrepreneurship Written Exam (100 Qs)',
-      testType: 'standard_100',
-      completedAt: Date.now() - 3 * 86400000,
-      timeSpentSeconds: 3420, // 57 minutes
-      totalQuestions: 100,
-      score: score1,
-      percentage: score1,
-      answers: answers1,
-      questions: sampleQuestions,
-      areaBreakdown: breakdown1,
-      sharedWithLeader: true,
-      sharedAt: Date.now() - 3 * 86400000,
-      studentNotes: 'Felt confident on Financial Analysis; need to review Business Law contracts.',
-    };
-
-    localStorage.setItem(STORAGE_KEYS.COMPLETED_EXAMS, JSON.stringify([exam1]));
+    const rawCurrent = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    if (rawCurrent) {
+      const cur: User = JSON.parse(rawCurrent);
+      if (cur.username === 'jordan_lee' || cur.id === 'usr_student_1' || cur.name === 'Jordan Lee') {
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+      }
+    }
+  } catch {
+    // ignore
   }
 }
 
@@ -106,7 +81,7 @@ export function calculateAreaBreakdown(
 
 // User methods
 export function getAllUsers(): User[] {
-  initializeSeedData();
+  initializeStorage();
   try {
     const data = localStorage.getItem(STORAGE_KEYS.USERS);
     return data ? JSON.parse(data) : [];
@@ -116,7 +91,7 @@ export function getAllUsers(): User[] {
 }
 
 export function getCurrentUser(): User | null {
-  initializeSeedData();
+  initializeStorage();
   try {
     const data = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
     return data ? JSON.parse(data) : null;
@@ -141,7 +116,7 @@ export function registerUser(params: {
   pin?: string;
   email?: string;
 }): { success: boolean; error?: string; user?: User } {
-  initializeSeedData();
+  initializeStorage();
   const trimmedUser = params.username.trim().toLowerCase();
   const trimmedName = params.name.trim();
 
@@ -198,7 +173,7 @@ export function loginUser(username: string, role: 'student' | 'cluster_leader', 
   error?: string;
   user?: User;
 } {
-  initializeSeedData();
+  initializeStorage();
   const trimmedUser = username.trim().toLowerCase();
   const users = getAllUsers();
   const found = users.find(u => u.username.toLowerCase() === trimmedUser);
@@ -224,7 +199,7 @@ export function loginUser(username: string, role: 'student' | 'cluster_leader', 
 
 // Exam history methods
 export function getCompletedExams(): CompletedExam[] {
-  initializeSeedData();
+  initializeStorage();
   try {
     const data = localStorage.getItem(STORAGE_KEYS.COMPLETED_EXAMS);
     return data ? JSON.parse(data) : [];

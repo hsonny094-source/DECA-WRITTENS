@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import {
   BookOpen,
-  Award,
   ShieldCheck,
   UserCheck,
   Clock,
@@ -20,7 +19,6 @@ import { getCachedOrGeneratedPool, INSTRUCTIONAL_AREAS } from '../data/questionP
 
 interface LandingHeroProps {
   onOpenLogin: (role?: 'student' | 'cluster_leader') => void;
-  onQuickDemo: (role: 'student') => void;
   onStartOfficialExam: () => void;
   onStartRandomExam: () => void;
   onStartSprintExam: () => void;
@@ -28,7 +26,6 @@ interface LandingHeroProps {
 
 export const LandingHero: React.FC<LandingHeroProps> = ({
   onOpenLogin,
-  onQuickDemo,
   onStartOfficialExam,
   onStartRandomExam,
   onStartSprintExam,
@@ -96,22 +93,17 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
               Entrepreneurship Written Exam
             </h1>
+            <div className="inline-flex items-center flex-wrap gap-2 text-xs sm:text-sm text-blue-200 bg-blue-950/60 border border-blue-800/60 px-3.5 py-1.5 rounded-xl">
+              <span className="text-slate-400 font-medium">Cluster Leaders:</span>
+              <span className="font-semibold text-white">Ronnie Agarwal</span>
+              <span className="text-blue-400">•</span>
+              <span className="font-semibold text-white">Omar Ahmed</span>
+              <span className="text-blue-400">•</span>
+              <span className="font-semibold text-white">Omar Dowidar</span>
+            </div>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
               Authentic classroom testing simulator for DECA Entrepreneurship written events. Practice with the official 100-question exam, randomized pulls from the {pool.length.toLocaleString()}-question bank, and realistic 70-minute competition timing.
             </p>
-          </div>
-
-          {/* Classroom One-Click Student Test Access */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              id="btn-fast-student-demo"
-              onClick={() => onQuickDemo('student')}
-              className="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center space-x-2 transition"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-              <span>Continue as Student (Jordan Lee)</span>
-            </button>
-            <span className="text-xs text-slate-500">or launch any test mode directly below:</span>
           </div>
         </div>
       </div>
@@ -122,7 +114,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           <div>
             <h2 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
               <GraduationCap className="w-5 h-5 text-blue-600" />
-              <span>Select Testing Mode</span>
+              <span>Select Exam Format</span>
             </h2>
             <p className="text-xs text-slate-500">Standard DECA competition rules: 100 questions, 70 minutes, 1 point each.</p>
           </div>
@@ -405,72 +397,26 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
         )}
       </div>
 
-      {/* Blueprint & DECA Performance Benchmarks */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Benchmarks Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-7 space-y-4">
-          <div className="flex items-center space-x-2 text-slate-900 font-bold">
-            <Award className="w-5 h-5 text-amber-500" />
-            <h3 className="text-base font-bold">DECA Competition Scoring Standards</h3>
-          </div>
-          <p className="text-xs text-slate-600">
-            Written exam scores are combined with role-play interview scores to calculate overall competition rank.
-          </p>
-
-          <div className="space-y-2.5 pt-1 text-xs">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-slate-900">District / Regional Cutoff</div>
-                <div className="text-[11px] text-slate-500">Qualifies for State Career Development Conference (SCDC)</div>
-              </div>
-              <span className="px-2.5 py-1 rounded-lg bg-slate-200 font-mono font-bold text-slate-800">
-                70–79%
-              </span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-blue-950">State (SCDC) Finalist & ICDC Qualifier</div>
-                <div className="text-[11px] text-blue-700">Top 4-6 in state qualify for International DECA ICDC</div>
-              </div>
-              <span className="px-2.5 py-1 rounded-lg bg-blue-600 font-mono font-bold text-white">
-                82–89%
-              </span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-amber-950">International (ICDC) Trophy Stage Target</div>
-                <div className="text-[11px] text-amber-700">Top 10 International finalist medal & DECA glass trophy</div>
-              </div>
-              <span className="px-2.5 py-1 rounded-lg bg-amber-500 font-mono font-bold text-white">
-                90–98%+
-              </span>
-            </div>
-          </div>
+      {/* DECA Instructional Areas Tested */}
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-7 space-y-4">
+        <div className="flex items-center space-x-2 text-slate-900 font-bold">
+          <BookOpen className="w-5 h-5 text-blue-600" />
+          <h3 className="text-base font-bold">DECA Instructional Areas Tested</h3>
         </div>
+        <p className="text-xs text-slate-600">
+          Exam questions are drawn from 12 core business curriculum competency areas.
+        </p>
 
-        {/* Blueprint Distribution Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-7 space-y-4">
-          <div className="flex items-center space-x-2 text-slate-900 font-bold">
-            <BookOpen className="w-5 h-5 text-blue-600" />
-            <h3 className="text-base font-bold">DECA Instructional Areas Tested</h3>
-          </div>
-          <p className="text-xs text-slate-600">
-            Exam questions are drawn from 12 core business curriculum competency areas.
-          </p>
-
-          <div className="grid grid-cols-2 gap-2 text-xs pt-1">
-            {INSTRUCTIONAL_AREAS.map(area => (
-              <div
-                key={area}
-                className="p-2.5 rounded-xl border border-slate-100 bg-slate-50 flex items-center space-x-2"
-              >
-                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span className="font-semibold text-slate-800 text-[11px] truncate">{area}</span>
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs pt-1">
+          {INSTRUCTIONAL_AREAS.map(area => (
+            <div
+              key={area}
+              className="p-3 rounded-xl border border-slate-100 bg-slate-50 flex items-center space-x-2.5"
+            >
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+              <span className="font-semibold text-slate-800 text-xs truncate">{area}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

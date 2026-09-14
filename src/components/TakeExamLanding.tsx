@@ -41,9 +41,17 @@ export const TakeExamLanding: React.FC<TakeExamLandingProps> = ({
             <span>Official DECA Entrepreneurship Simulation</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
             DECA Entrepreneurship Written Exam
           </h1>
+          <div className="inline-flex items-center flex-wrap gap-1.5 text-xs text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-lg mb-3">
+            <span className="font-medium text-slate-500">Cluster Leaders:</span>
+            <span className="font-semibold text-slate-900">Ronnie Agarwal</span>
+            <span className="text-slate-400">•</span>
+            <span className="font-semibold text-slate-900">Omar Ahmed</span>
+            <span className="text-slate-400">•</span>
+            <span className="font-semibold text-slate-900">Omar Dowidar</span>
+          </div>
           <p className="text-base text-slate-600 max-w-2xl leading-relaxed mb-8">
             Simulate the true DECA competition environment. Your test will draw <strong className="text-slate-900">100 random multiple-choice questions</strong> from our extensive <strong className="text-blue-700">{pool.length.toLocaleString()}-question pool</strong> spanning 10 years of DECA Entrepreneurship exams (2015–2024).
           </p>

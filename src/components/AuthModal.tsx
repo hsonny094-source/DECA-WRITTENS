@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UserRole, User } from '../types';
 import { loginUser, registerUser } from '../services/storage';
-import { ShieldCheck, UserCheck, Key, Lock, AlertCircle, X, Sparkles } from 'lucide-react';
+import { ShieldCheck, UserCheck, Key, Lock, AlertCircle, X } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -56,15 +56,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleQuickDemo = () => {
-    setError(null);
-    const res = loginUser('jordan_lee', 'student');
-    if (res.success && res.user) {
-      onSuccess(res.user);
-      onClose();
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-150">
@@ -81,25 +72,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <span>DECA Written Exam Testing Terminal</span>
           </div>
           <h2 className="text-xl font-bold text-white">
-            {tab === 'login' ? 'Sign In to Your Account' : 'Create Your Student Account'}
+            {tab === 'login' ? 'Sign In to Your Account' : 'Create Your Account'}
           </h2>
           <p className="text-xs text-slate-300 mt-1">
             Access authentic DECA Entrepreneurship exam questions, official 70-minute timed exams, and performance tracking.
           </p>
-
-          {/* Quick Demo Login */}
-          <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-xs text-slate-400">Classroom test mode:</span>
-            <button
-              id="btn-quick-student"
-              type="button"
-              onClick={handleQuickDemo}
-              className="flex items-center space-x-1.5 py-1.5 px-3 rounded-lg bg-blue-600/80 hover:bg-blue-600 text-xs font-semibold text-white transition"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-              <span>Continue as Student (Jordan Lee)</span>
-            </button>
-          </div>
         </div>
 
         {/* Tab switch */}

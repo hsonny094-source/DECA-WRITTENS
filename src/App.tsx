@@ -77,34 +77,19 @@ export default function App() {
     setActiveView('take_exam');
   };
 
-  const handleQuickDemo = (role: 'student' | 'cluster_leader') => {
-    if (role === 'student') {
-      const res = loginUser('jordan_lee', 'student');
-      if (res.success && res.user) {
-        handleLoginSuccess(res.user);
-      }
-    }
-  };
-
   // Helper to ensure an active student session before starting an exam
   const ensureStudentSession = (): User => {
     if (currentUser) return currentUser;
-    const res = loginUser('jordan_lee', 'student');
-    if (res.success && res.user) {
-      persistCurrentUser(res.user);
-      setCurrentUser(res.user);
-      return res.user;
-    }
-    const fallbackUser: User = {
-      id: 'guest_student',
-      username: 'student_guest',
-      name: 'Student Competitor',
+    const guestUser: User = {
+      id: `guest_${Date.now()}`,
+      username: 'guest_competitor',
+      name: 'Guest Competitor',
       role: 'student',
       createdAt: Date.now(),
     };
-    persistCurrentUser(fallbackUser);
-    setCurrentUser(fallbackUser);
-    return fallbackUser;
+    persistCurrentUser(guestUser);
+    setCurrentUser(guestUser);
+    return guestUser;
   };
 
   // Launch Official Test 1327 (100 Questions, 70 min)
@@ -281,7 +266,6 @@ export default function App() {
             {activeView === 'take_exam' ? (
               <LandingHero
                 onOpenLogin={handleOpenAuth}
-                onQuickDemo={handleQuickDemo}
                 onStartOfficialExam={handleStartOfficialExam}
                 onStartRandomExam={handleStartStandardExam}
                 onStartSprintExam={handleStartSprintExam}
@@ -289,7 +273,6 @@ export default function App() {
             ) : (
               <LandingHero
                 onOpenLogin={handleOpenAuth}
-                onQuickDemo={handleQuickDemo}
                 onStartOfficialExam={handleStartOfficialExam}
                 onStartRandomExam={handleStartStandardExam}
                 onStartSprintExam={handleStartSprintExam}
