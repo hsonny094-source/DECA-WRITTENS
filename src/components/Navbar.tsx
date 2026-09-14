@@ -12,13 +12,14 @@ import {
   X,
   Upload,
   Layers,
-  Lock
+  Lock,
+  Calendar,
 } from 'lucide-react';
 
 interface NavbarProps {
   currentUser: User | null;
-  activeView: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests';
-  onSelectView: (view: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests') => void;
+  activeView: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar';
+  onSelectView: (view: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar') => void;
   onOpenAuth: (role?: 'student' | 'cluster_leader') => void;
   onLogout: () => void;
   onStartExam: () => void;
@@ -38,7 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleNavClick = (view: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests') => {
+  const handleNavClick = (view: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar') => {
     setMobileMenuOpen(false);
     onSelectView(view);
   };
@@ -120,19 +121,35 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Student specific link */}
               {currentUser?.role === 'student' && (
-                <button
-                  type="button"
-                  id="nav-student-perf-btn"
-                  onClick={() => handleNavClick('student_dashboard')}
-                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
-                    activeView === 'student_dashboard'
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                  }`}
-                >
-                  <BarChart2 className="w-4 h-4 text-blue-400" />
-                  <span>My Performance</span>
-                </button>
+                <>
+                  <button
+                    type="button"
+                    id="nav-student-perf-btn"
+                    onClick={() => handleNavClick('student_dashboard')}
+                    className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                      activeView === 'student_dashboard'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    }`}
+                  >
+                    <BarChart2 className="w-4 h-4 text-blue-400" />
+                    <span>My Performance</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="nav-student-calendar-btn"
+                    onClick={() => handleNavClick('cluster_calendar')}
+                    className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                      activeView === 'cluster_calendar'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4 text-amber-400" />
+                    <span>Calendar & Slides</span>
+                  </button>
+                </>
               )}
 
               {/* Cluster Leader specific links */}
@@ -154,6 +171,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   <button
                     type="button"
+                    id="nav-leader-calendar-btn"
+                    onClick={() => handleNavClick('cluster_calendar')}
+                    className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                      activeView === 'cluster_calendar'
+                        ? 'bg-amber-600 text-white shadow-sm'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4 text-amber-400" />
+                    <span>Calendar & Slides</span>
+                  </button>
+
+                  <button
+                    type="button"
                     id="nav-create-tests-btn"
                     onClick={() => handleNavClick('create_tests')}
                     className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
@@ -170,15 +201,31 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Guest links */}
               {!currentUser && (
-                <button
-                  type="button"
-                  id="nav-advisor-portal-btn"
-                  onClick={() => onOpenAuth('cluster_leader')}
-                  className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer"
-                >
-                  <Lock className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Advisor Portal</span>
-                </button>
+                <>
+                  <button
+                    type="button"
+                    id="nav-guest-calendar-btn"
+                    onClick={() => handleNavClick('cluster_calendar')}
+                    className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                      activeView === 'cluster_calendar'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4 text-amber-400" />
+                    <span>Calendar & Slides</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="nav-advisor-portal-btn"
+                    onClick={() => onOpenAuth('cluster_leader')}
+                    className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Advisor Portal</span>
+                  </button>
+                </>
               )}
             </nav>
           )}
@@ -278,17 +325,31 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {currentUser?.role === 'student' && (
-            <button
-              type="button"
-              id="mobile-nav-perf"
-              onClick={() => handleNavClick('student_dashboard')}
-              className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
-                activeView === 'student_dashboard' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
-              }`}
-            >
-              <BarChart2 className="w-4 h-4 text-blue-400" />
-              <span>My Performance & Scores</span>
-            </button>
+            <>
+              <button
+                type="button"
+                id="mobile-nav-perf"
+                onClick={() => handleNavClick('student_dashboard')}
+                className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
+                  activeView === 'student_dashboard' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <BarChart2 className="w-4 h-4 text-blue-400" />
+                <span>My Performance & Scores</span>
+              </button>
+
+              <button
+                type="button"
+                id="mobile-nav-calendar"
+                onClick={() => handleNavClick('cluster_calendar')}
+                className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
+                  activeView === 'cluster_calendar' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-amber-400" />
+                <span>Calendar & Google Slides (2026-27)</span>
+              </button>
+            </>
           )}
 
           {currentUser?.role === 'cluster_leader' && (
@@ -307,6 +368,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               <button
                 type="button"
+                id="mobile-nav-leader-calendar"
+                onClick={() => handleNavClick('cluster_calendar')}
+                className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
+                  activeView === 'cluster_calendar' ? 'bg-amber-600 text-white' : 'text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-amber-400" />
+                <span>Calendar & Google Slides (2026-27)</span>
+              </button>
+
+              <button
+                type="button"
                 id="mobile-nav-create-tests"
                 onClick={() => handleNavClick('create_tests')}
                 className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
@@ -320,18 +393,32 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
 
           {!currentUser && (
-            <button
-              type="button"
-              id="mobile-nav-advisor"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenAuth('cluster_leader');
-              }}
-              className="w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-300 hover:bg-slate-800 transition cursor-pointer"
-            >
-              <Lock className="w-4 h-4 text-amber-400" />
-              <span>Advisor Portal (Authorization)</span>
-            </button>
+            <>
+              <button
+                type="button"
+                id="mobile-nav-guest-calendar"
+                onClick={() => handleNavClick('cluster_calendar')}
+                className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
+                  activeView === 'cluster_calendar' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-amber-400" />
+                <span>Calendar & Google Slides (2026-27)</span>
+              </button>
+
+              <button
+                type="button"
+                id="mobile-nav-advisor"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAuth('cluster_leader');
+                }}
+                className="w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-300 hover:bg-slate-800 transition cursor-pointer"
+              >
+                <Lock className="w-4 h-4 text-amber-400" />
+                <span>Advisor Portal (Authorization)</span>
+              </button>
+            </>
           )}
         </div>
       )}

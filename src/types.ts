@@ -84,3 +84,19 @@ export interface ClusterStudentSummary {
   weakestArea?: string;
   strongestArea?: string;
 }
+
+export type CalendarTag = 'slides' | 'meeting' | 'exam' | 'deadline' | 'notes' | 'resource';
+
+export interface CalendarNote {
+  id: string;
+  date: string; // YYYY-MM-DD (2026-01-01 to 2027-02-28)
+  title: string;
+  description: string;
+  tag: CalendarTag;
+  linkUrl?: string;
+  linkTitle?: string;
+  authorId: string;
+  authorName: string;
+  createdAt: number;
+  updatedAt?: number;
+}

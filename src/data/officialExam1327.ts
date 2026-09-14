@@ -15,7 +15,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:014 - Identify company brand touchpoints",
     rationale: "Brand touchpoints are all the opportunities that a company has to connect with its customers and create a brand experience. An online ad is a direct communication touchpoint that exposes consumers to the chocolate brand.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EC:009 - Explain the concept of private enterprise",
     rationale: "The profit motive is the economic basis of the private enterprise system. The desire to make a profit encourages people to start businesses, invest capital, and produce goods and services.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 3,
@@ -47,7 +47,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:015 - Conduct competitive purchasing and vendor selection",
     rationale: "Competitive bidding involves requesting quotes from multiple prospective vendors and comparing them to obtain the highest quality goods or services at the best price.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 4,
@@ -63,7 +63,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EI:012 - Demonstrate persuasive techniques in professional communication",
     rationale: "Maintaining comfortable, direct eye contact demonstrates confidence, attentiveness, and honesty, making the speaker more credible and persuasive.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 5,
@@ -79,7 +79,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:040 - Describe characteristics of successful entrepreneurs",
     rationale: "Entrepreneurs must be willing to take calculated risks and possess a strong work ethic to persevere through the challenges of launching and growing a venture.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 6,
@@ -95,7 +95,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:085 - Explain the role of finance and accounting in business",
     rationale: "The primary purpose of accounting is keeping track of a company's financial transactions, recording revenues, expenses, assets, and liabilities to produce accurate financial statements.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 7,
@@ -111,7 +111,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:094 - Interpret components of an income statement",
     rationale: "Raw materials directly used in the production of finished products are accounted for in Cost of Goods Sold (COGS) on the income statement.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 8,
@@ -127,7 +127,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:001 - Explain management directing and supervisory functions",
     rationale: "Direct supervision of staff allows managers to monitor workflow, provide direction, answer questions, and ensure tasks meet scheduled deadlines and quality standards.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 9,
@@ -143,7 +143,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:015 - Foster workplace diversity and creative collaboration",
     rationale: "Workplace diversity brings varied viewpoints and cognitive backgrounds together, sparking greater creativity, problem-solving, and innovative ideas.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 10,
@@ -159,7 +159,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:016 - Manage physical distribution and logistics operations",
     rationale: "Logistics involves coordinating the transportation, physical movement, inventory holding, and warehousing of goods from source to destination.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 11,
@@ -175,7 +175,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "BL:133 - Apply ethical and legal standards in entrepreneurship",
     rationale: "Circumventing regulations, tax fraud, or deceptive business practices often results in regulatory fines, lawsuits, loss of licenses, and severe criminal or legal trouble.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 12,
@@ -191,7 +191,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:018 - Conduct job analysis and recruitment planning",
     rationale: "A job analysis systematically examines the duties, necessary skills, responsibilities, and working environment required for a role before job descriptions are created and recruitment begins.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 13,
@@ -207,7 +207,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:022 - Evaluate employee performance criteria",
     rationale: "Work habits—including reliability, attendance, time management, collaboration, and diligence—are primary criteria when assessing current on-the-job employee performance.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 14,
@@ -223,7 +223,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EC:010 - Explain economic contributions of small businesses",
     rationale: "Small businesses pay local property, sales, and business taxes that fund public schools, emergency services, roads, and municipal infrastructure.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 15,
@@ -239,7 +239,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:017 - Explain production transformation and conversion processes",
     rationale: "Production takes raw materials, labor, capital, and intellectual inputs and converts them into tangible finished goods or usable services.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 16,
@@ -255,7 +255,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:092 - Calculate gross margin and net operating profit",
     rationale: "Net Profit = Gross Margin - Operating Costs. For net profit to be positive, operating costs must be less than the gross margin earned on sales.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 17,
@@ -271,7 +271,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:024 - Evaluate promotional campaign effectiveness",
     rationale: "The only definitive conclusion supported by the data is that the promotional campaign generated an immediate short-term increase in sales revenue during the broadcast period.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 18,
@@ -287,7 +287,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "BL:105 - Recognize civil law torts affecting business liability",
     rationale: "Negligence is the failure to exercise the degree of care that an ordinary prudent person or company would exercise under similar circumstances, causing harm through inaction or carelessness.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 19,
@@ -303,7 +303,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:031 - Explain purposes of sharing financial data with lenders",
     rationale: "Commercial banks and lending institutions require comprehensive balance sheets and profit/loss statements to assess creditworthiness and collateral before issuing loans.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 20,
@@ -319,7 +319,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "RM:041 - Identify sources of regulatory and economic risk",
     rationale: "New regulatory mandates, fees, compliance standards, and taxes can substantially increase operating expenses or restrict operating practices, thereby reducing profits.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 21,
@@ -335,7 +335,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:020 - Conduct pre-employment background and reference verification",
     rationale: "Checking references verifies that the candidate's reported experience, degrees, skills, work history, and character statements are accurate.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 22,
@@ -351,7 +351,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:030 - Understand value exchange in pricing strategy",
     rationale: "Effective pricing ensures both parties benefit: the consumer receives satisfactory utility and perceived value, while the seller generates sustainable revenue and profit margin.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 23,
@@ -367,7 +367,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EI:006 - Demonstrate adaptability in changing work environments",
     rationale: "Adaptability involves responding positively to changing requirements, embracing new technologies, and taking initiative to adjust effectively.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 24,
@@ -383,7 +383,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EC:017 - Analyze economic indicators and business cycles",
     rationale: "The business cycle (expansion, peak, contraction, trough) is an economic factor, whereas social media is technological, and aging populations/lifestyles are demographic/societal.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 25,
@@ -399,7 +399,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EI:014 - Apply collaborative negotiation strategies",
     rationale: "Collaborative or integrative negotiation seeks a win-win outcome where both parties satisfy their core objectives and create shared value.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 26,
@@ -415,7 +415,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:105 - Utilize creative problem-solving and ideation methodologies",
     rationale: "Reverse brainstorming involves brainstorming ways to cause or worsen a problem, then inverting those negative points into creative constructive solutions.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 27,
@@ -431,7 +431,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:028 - Document and resolve employee grievances",
     rationale: "Documentation should be clear, objective, and accurately cover all critical aspects—including the issue, parties involved, investigation, and resolution—without unneeded verbosity.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 28,
@@ -447,7 +447,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EC:022 - Identify drivers of global commerce and trade",
     rationale: "Technological advances such as digital payment systems, cloud communication, automated customs tracking, and global e-commerce platforms lower entry barriers for international trade.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 29,
@@ -463,7 +463,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:088 - Analyze balance sheet liquidity and solvency for credit underwriting",
     rationale: "A balance sheet reveals a company's assets, existing liabilities, and equity, allowing lenders to calculate debt-to-equity and current ratios to judge whether to grant credit.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 30,
@@ -479,7 +479,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "BL:003 - Compare forms of legal business organization",
     rationale: "Sole proprietors face unlimited personal liability, meaning their personal assets (home, savings) can be seized to pay off business obligations and legal judgments.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 31,
@@ -495,7 +495,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:019 - Analyze distribution channels in the marketing mix",
     rationale: "'Place' in the 4 Ps relates to distribution channels, logistics, and intermediaries used to get goods into the hands of buyers.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 32,
@@ -511,7 +511,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:101 - Scan external environment for societal and cultural trends",
     rationale: "Shifting lifestyle priorities, wellness attitudes, and health consciousness are societal trends that create entrepreneurial opportunities for new products and services.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 33,
@@ -527,7 +527,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:011 - Conduct industry analysis to identify customer requirements",
     rationale: "Studying industry trade publications and regulatory trends (such as HIPAA, EHR integration, and staffing pressures) reveals the operational needs and expectations of hospital decision-makers.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 34,
@@ -543,7 +543,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:091 - Calculate net cash flow",
     rationale: "Cash Flow = Cash Receipts ($345,675) - Operating Expenses ($312,480) - Taxes ($7,500) = $345,675 - $319,980 = $25,695.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 35,
@@ -559,7 +559,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:114 - Structure components of a comprehensive business plan",
     rationale: "The target market overview details the primary customer profile, demographic characteristics, psychographics, buying behaviors, and market segment size.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 36,
@@ -575,7 +575,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:020 - Explain corporate governance and board oversight",
     rationale: "Founders who exit day-to-day executive roles often transition to the Board of Directors, where they provide strategic guidance and governance oversight without daily management duties.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 37,
@@ -591,7 +591,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:110 - Manage credit and accounts receivable collections",
     rationale: "When accounts receivable age past their due dates without collection action, the risk of nonpayment escalates into bad debt expenses and unrecoverable write-offs.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 38,
@@ -607,7 +607,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:015 - Foster collaborative and continuous learning culture",
     rationale: "Sharing best practices, hosting cross-functional training, and openly discussing lessons learned cultivates an organizational culture of mutual support and shared knowledge.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 39,
@@ -623,7 +623,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:038 - Distinguish feasibility studies from business plans",
     rationale: "A feasibility study evaluates whether an entrepreneurial idea has viable market and financial potential. If feasible, the entrepreneur proceeds to write a full business plan.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 40,
@@ -639,7 +639,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:031 - Evaluate debt financing risks and collateral",
     rationale: "A secured loan requires the borrower to pledge assets (such as real estate, equipment, or inventory) as collateral. If the borrower defaults, the lender has legal rights to seize those assets.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 41,
@@ -655,7 +655,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:096 - Calculate startup cost percentages",
     rationale: "Percentage = ($11,250 / $75,000) * 100% = 0.15 * 100% = 15%.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 42,
@@ -671,7 +671,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:008 - Monitor and evaluate business plan execution",
     rationale: "Operating strategies are the tactical plans used to achieve sales, production, and financial goals. Businesses monitor them to see if adjustments are needed to hit targets.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 43,
@@ -687,7 +687,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:020 - Implement total quality management programs",
     rationale: "Six Sigma is a disciplined, data-driven methodology designed to eliminate defects, minimize variability, and drive continuous quality improvement across all processes.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 44,
@@ -703,7 +703,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:102 - Calculate payroll benefit deductions",
     rationale: "Swati's share = 40% of $575 = $230 per month. Annual cost = $230 * 12 = $2,760. Paid bi-weekly (26 pay periods/year): $2,760 / 26 = $106.1538, which rounds up to $106.16 per paycheck.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 45,
@@ -719,7 +719,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "NF:012 - Present numerical business data in visual formats",
     rationale: "Visual graphics, charts, and diagrams make quantitative trends, comparisons, and financial figures far easier for readers to quickly comprehend.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 46,
@@ -735,7 +735,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "BL:134 - Explain business taxation obligations on dividends and earnings",
     rationale: "Dividends earned on corporate investments represent income to the receiving entity and are subject to corporate income tax rules.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 47,
@@ -751,7 +751,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:001 - Explain the role of operations in competitive advantage",
     rationale: "Efficient operations lower unit production costs, reduce waste, improve turnaround times, and maintain quality, making the business more competitive in the marketplace.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 48,
@@ -767,7 +767,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "NF:004 - Assess organizational technology needs",
     rationale: "The first step in assessing technology needs is determining what software applications (accounting, inventory, CRM, sales) will streamline operational workflows.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 49,
@@ -783,7 +783,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:028 - Formulate product life cycle decline strategies",
     rationale: "A harvest strategy involves reducing or eliminating marketing and capital investment in mature or outdated products in decline to milk maximum remaining profit.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 50,
@@ -799,7 +799,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:025 - Optimize facility layout and space efficiency",
     rationale: "Maximizing sales productivity per square foot and eliminating wasted retail floor space reduces overhead costs and increases profit margins.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 51,
@@ -815,7 +815,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EI:018 - Recognize ethical conflicts of interest",
     rationale: "A personal relationship with a subordinate creates a conflict between personal loyalties and fiduciary obligations to the company, impairing objective evaluation.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 52,
@@ -831,7 +831,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EC:013 - Explain economies of scale in production",
     rationale: "Economies of scale occur when increasing production volume spreads fixed costs over more units, resulting in a lower average per-unit production cost.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 53,
@@ -847,7 +847,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:041 - Recognize emotional and personal risks of venture creation",
     rationale: "Starting a venture involves high stress, long hours, and financial instability that often trigger personal emotional strains like marital friction and family stress.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 54,
@@ -863,7 +863,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:089 - Explain budgeting principles tailored to business type",
     rationale: "Budgeting approaches vary significantly depending on whether the business is a manufacturer, retailer, service provider, or technology firm with seasonal variations.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 55,
@@ -879,7 +879,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:106 - Lead ideation and brainstorming sessions",
     rationale: "A facilitator remains neutral, sets ground rules, encourages broad participation, keeps the group focused, and guides the creative ideation process.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 56,
@@ -895,7 +895,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "PD:018 - Track milestones to achieve strategic goals",
     rationale: "Regularly monitoring progress allows for timely course corrections, maintains motivation, and substantially increases the probability of achieving goals.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 57,
@@ -911,7 +911,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:103 - Leverage industry expertise and mentorship",
     rationale: "Industry experts offer valuable insights into customer trends, supply chain bottlenecks, regulatory hurdles, and practical market realities.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 58,
@@ -927,7 +927,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:018 - Acquire cost-effective capital resources and equipment",
     rationale: "Purchasing quality refurbished or used machinery and equipment reduces early capital expenditures while preserving startup cash reserves.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 59,
@@ -943,7 +943,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:019 - Assess staffing needs and employment structure",
     rationale: "Before writing ads or interviewing, an entrepreneur must assess the volume of excess work to determine whether a part-time or full-time position is justified.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 60,
@@ -959,7 +959,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "EN:115 - Compile market analysis components for a business plan",
     rationale: "Data concerning local demographic populations, income levels, customer segments, and purchasing behaviors are presented in the Market Analysis section.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 61,
@@ -975,7 +975,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:021 - Design internal control and governance mechanisms",
     rationale: "Internal control mechanisms—such as separation of duties, operational checklists, and KPI tracking—ensure accountability, efficiency, and accurate reporting.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 62,
@@ -991,7 +991,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:019 - Coordinate supply chain delivery and logistics",
     rationale: "Supply chain management coordinates logistics, freight carriers, order fulfillment, and routing to ensure products arrive at customer locations on schedule.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 63,
@@ -1007,7 +1007,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:002 - Define the concept of a market",
     rationale: "In marketing, a market consists of all current and prospective customers who share a specific need or desire and are willing and able to purchase solutions.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 64,
@@ -1023,7 +1023,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "BL:005 - Explain corporate bylaws and operational rules",
     rationale: "Corporate bylaws are internal rules established by a corporation to govern its internal operations, voting procedures, board elections, and management duties.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 65,
@@ -1039,7 +1039,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:022 - Adapt operations to environmental and regulatory mandates",
     rationale: "Government environmental laws, zoning restrictions, and EPA guidelines are regulatory factors that dictate how business processes must be designed.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 66,
@@ -1055,7 +1055,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "NF:015 - Leverage human capital and tacit knowledge management",
     rationale: "Knowledge is intellectual capital that employees acquire through long-term experience, observation, and insight, creating institutional value.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 67,
@@ -1071,7 +1071,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:026 - Select targeted direct advertising channels",
     rationale: "Direct advertising (targeted email, direct mail, tailored digital ads) enables marketers to target precise demographic or behavioral customer segments.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 68,
@@ -1087,7 +1087,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:021 - Understand dimensions of product quality",
     rationale: "Conformance to specifications measures how consistently a product meets its engineered functional requirements, design parameters, and operational capabilities.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 69,
@@ -1103,7 +1103,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:020 - Explain roles of intermediaries in distribution channels",
     rationale: "Producers hire sales agents or manufacturer's representatives to bring buyers and sellers together and negotiate sales without taking title to goods.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 70,
@@ -1119,7 +1119,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:014 - Redesign business processes for performance enhancement",
     rationale: "Upgrading machinery or automating workflows increases output velocity and labor efficiency, directly improving overall operational performance.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 71,
@@ -1135,7 +1135,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:004 - Conduct SWOT analysis for organizational assessment",
     rationale: "A SWOT analysis examines internal factors (Strengths & Weaknesses) as well as external environment conditions (Opportunities & Threats).",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 72,
@@ -1151,7 +1151,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:008 - Use marketing intelligence to mitigate commercial risk",
     rationale: "Marketing research provides empirical data on customer preferences and competitor actions, enabling managers to forecast market shifts and reduce business risks.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 73,
@@ -1167,7 +1167,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:025 - Identify types of consumer sales promotions",
     rationale: "A rebate is a sales promotion that provides a cash reimbursement to the purchaser after the purchase is completed, upon submission of proof of purchase.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 74,
@@ -1183,7 +1183,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:009 - Evaluate primary and secondary marketing research data sources",
     rationale: "Internal secondary data—such as historical sales invoices, customer records, and financial reports already owned by the firm—costs virtually nothing to retrieve.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 75,
@@ -1199,7 +1199,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:022 - Identify primary objectives of promotion",
     rationale: "The three core objectives of promotion are to inform, persuade, and remind target customers about a company's offerings and brand value.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 76,
@@ -1215,7 +1215,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:016 - Align supply chain capabilities to strategic competitive goals",
     rationale: "A streamlined, agile supply chain lowers lead times, improves order fulfillment rates, and lowers operating costs, establishing a decisive competitive advantage.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 77,
@@ -1231,7 +1231,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:027 - Utilize public relations and community philanthropy",
     rationale: "Donating products to non-profit community fundraisers builds public goodwill, enhances brand reputation, and demonstrates corporate citizenship via public relations.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 78,
@@ -1247,7 +1247,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:022 - Demonstrate corporate social responsibility (CSR)",
     rationale: "Modern corporate governance requires balancing shareholder profits with environmental sustainability, fair labor practices, ethical integrity, and community support.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 79,
@@ -1263,7 +1263,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:004 - Classify consumer and industrial product categories",
     rationale: "Consumer goods are purchased by final end-users for personal, family, or household use—referred to in marketing as ultimate consumption.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 80,
@@ -1279,7 +1279,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:029 - Deploy PR communication channels for stakeholder awareness",
     rationale: "Public relations channels (press releases, media interviews, corporate newsletters) are designed to provide factual, transparent information to build understanding.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 81,
@@ -1295,7 +1295,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:031 - Apply competition-oriented and industry standard pricing",
     rationale: "Matching competitor price points aligns pricing with prevailing industry standards or the 'going rate' in a competitive marketplace.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 82,
@@ -1311,7 +1311,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:018 - Manage business product and service mix width and depth",
     rationale: "A company's product mix encompasses the total assortment of all product lines and individual service offerings that a seller makes available to buyers.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 83,
@@ -1327,7 +1327,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:030 - Manage change and overcome employee resistance",
     rationale: "Transparent, proactive communication explaining the reasons, expectations, and benefits of structural changes reduces uncertainty and eases resistance.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 84,
@@ -1343,7 +1343,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:032 - Determine customer-driven pricing strategies",
     rationale: "Pricing strategies are tailored to the economic profiles, price sensitivities, and value perceptions of specific target customer segments.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 85,
@@ -1359,7 +1359,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:012 - Establish operational standard operating procedures (SOPs)",
     rationale: "Formally documented business processes establish standardized workflows, ensuring operational consistency, predictable quality, and reliable execution.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 86,
@@ -1375,7 +1375,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "RM:005 - Implement Enterprise Risk Management (ERM) frameworks",
     rationale: "Enterprise Risk Management views risk holistically, enabling firms not only to protect downside value but also to capitalize proactively on market opportunities.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 87,
@@ -1391,7 +1391,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:021 - Coordinate channel member cooperative advertising and promotion",
     rationale: "Cooperative advertising arrangements between retailers and manufacturers represent a channel management collaboration to promote products effectively.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 88,
@@ -1407,7 +1407,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "SM:023 - Evaluate benefits of transparent corporate governance",
     rationale: "Effective governance creates clear, transparent rules, fiduciary accountability, and internal checks that align the interests of leaders and investors.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 89,
@@ -1423,7 +1423,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:033 - Apply penetration pricing to expand market adoption",
     rationale: "Lowering prices (penetration pricing) reduces barriers to purchase, attracting budget-conscious consumers and driving rapid volume adoption.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 90,
@@ -1439,7 +1439,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:023 - Adapt promotional strategy across the Product Life Cycle (PLC)",
     rationale: "During the growth stage, new competitors enter the market rapidly, requiring promotional messaging to emphasize unique brand features and competitive advantages.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 91,
@@ -1455,7 +1455,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:006 - Segment markets based on shared demographic and psychographic profiles",
     rationale: "Market segmentation involves aggregating prospective buyers into groups that share common characteristics, needs, and will respond similarly to a marketing action.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 92,
@@ -1471,7 +1471,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "OP:024 - Evaluate channel member logistics and service performance",
     rationale: "Channel evaluation focuses on whether distributors deliver high customer service (on-time, undamaged orders) while maintaining cost-effective transport rates.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 93,
@@ -1487,7 +1487,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "RM:012 - Implement physical workplace safety and hazard controls",
     rationale: "Physical risk management addresses injuries and property hazards. Ensuring all employees know emergency exit locations is an essential physical safety precaution.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 94,
@@ -1503,7 +1503,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:015 - Formulate venture brand promise and value propositions",
     rationale: "A brand promise is a statement made to customers identifying what value, experience, and benefits they can consistently expect during every brand interaction.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 95,
@@ -1519,7 +1519,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:095 - Perform financial ratio analysis",
     rationale: "Ratio analysis uses liquidity ratios (current ratio), profitability ratios (net margin, ROE), and efficiency ratios (inventory turnover) to evaluate financial health.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 96,
@@ -1535,7 +1535,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:016 - Define product- and service-oriented marketing goals",
     rationale: "In marketing, services are considered intangible products; goals targeting customer service quality and satisfaction represent product-oriented objectives.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 97,
@@ -1551,7 +1551,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:007 - Conduct primary customer research and interviews",
     rationale: "Directly interviewing and engaging prospective customers in the target demographic is an effective primary research technique to discover real needs.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 98,
@@ -1567,7 +1567,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "FI:032 - Compare advantages of debt vs. equity financing",
     rationale: "Unlike equity financing where founders must surrender voting shares and ownership control to outside investors, debt financing allows the entrepreneur to retain complete control.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 99,
@@ -1583,7 +1583,7 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "HR:021 - Align workforce staffing levels with operational demand",
     rationale: "When consumer traffic and demand for service surge, managers must schedule and deploy more employees to ensure customer satisfaction and operational speed.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   },
   {
     id: 100,
@@ -1599,6 +1599,6 @@ export const OFFICIAL_EXAM_1327: Question[] = [
     indicator: "MK:010 - Conduct competitive market share analysis",
     rationale: "A competitive analysis evaluates rival offerings, pricing models, market positioning, and customer retention to determine if competitors are capturing market share.",
     year: 2026,
-    source: "DECA Official Exam (Test 1327 - MBA Research)"
+    source: "DECA Official Exam (Test 1327)"
   }
 ];

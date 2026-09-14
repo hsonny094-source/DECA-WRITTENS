@@ -21,6 +21,7 @@ import { ExamResults } from './components/ExamResults';
 import { StudentDashboard } from './components/StudentDashboard';
 import { ClusterLeaderDashboard } from './components/ClusterLeaderDashboard';
 import { QuestionBankView } from './components/QuestionBankView';
+import { ClusterCalendarView } from './components/ClusterCalendarView';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(() => getCurrentUser());
@@ -29,7 +30,7 @@ export default function App() {
 
   // Navigation views
   const [activeView, setActiveView] = useState<
-    'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests'
+    'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar'
   >(() => (currentUser?.role === 'cluster_leader' ? 'leader_roster' : 'take_exam'));
 
   // Active Exam state
@@ -204,6 +205,13 @@ export default function App() {
             }}
             onRetakeExam={handleStartStandardExam}
           />
+        ) : activeView === 'cluster_calendar' ? (
+          /* Cluster Calendar (2026 - Feb 2027) & Google Slides Hub */
+          <ClusterCalendarView
+            currentUser={currentUser}
+            onOpenAuthModal={() => handleOpenAuth('cluster_leader')}
+            onStartPracticeExam={handleStartStandardExam}
+          />
         ) : activeView === 'question_bank' ? (
           /* Dedicated Question Bank Explorer - Accessible to all */
           <QuestionBankView
@@ -263,21 +271,13 @@ export default function App() {
         ) : (
           /* Guest / Public Landing View */
           <div>
-            {activeView === 'take_exam' ? (
-              <LandingHero
-                onOpenLogin={handleOpenAuth}
-                onStartOfficialExam={handleStartOfficialExam}
-                onStartRandomExam={handleStartStandardExam}
-                onStartSprintExam={handleStartSprintExam}
-              />
-            ) : (
-              <LandingHero
-                onOpenLogin={handleOpenAuth}
-                onStartOfficialExam={handleStartOfficialExam}
-                onStartRandomExam={handleStartStandardExam}
-                onStartSprintExam={handleStartSprintExam}
-              />
-            )}
+            <LandingHero
+              onOpenLogin={handleOpenAuth}
+              onStartOfficialExam={handleStartOfficialExam}
+              onStartRandomExam={handleStartStandardExam}
+              onStartSprintExam={handleStartSprintExam}
+              onOpenCalendar={() => setActiveView('cluster_calendar')}
+            />
           </div>
         )}
       </main>
@@ -297,7 +297,7 @@ export default function App() {
             <div className="flex items-center space-x-2">
               <span className="font-bold text-white">DECA Entrepreneurship Written Exam Terminal</span>
               <span>•</span>
-              <span>Official MBA Research Exam & {currentPool.length.toLocaleString()}-Question Bank</span>
+              <span>Official 100-Question Exam & {currentPool.length.toLocaleString()}-Question Bank</span>
             </div>
             <div className="flex items-center space-x-3 text-slate-500">
               <span>Standard 70-Minute Competition Timer</span>

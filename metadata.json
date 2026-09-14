@@ -1,6 +1,6 @@
 {
   "name": "DECA Entrepreneurship Exam Prep",
-  "description": "DECA Entrepreneurship written exam testing terminal featuring official MBA Research tests, dynamic question practice bank, 70-minute competition timer, student performance analytics, and cluster leader tools.",
+  "description": "DECA Entrepreneurship written exam testing terminal featuring official DECA written tests, dynamic question practice bank, 70-minute competition timer, student performance analytics, and cluster leader tools.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

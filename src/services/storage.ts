@@ -1,4 +1,4 @@
-import { User, CompletedExam, CustomTest, Question, InstructionalArea, ClusterStudentSummary } from '../types';
+import { User, CompletedExam, CustomTest, Question, InstructionalArea, ClusterStudentSummary, CalendarNote } from '../types';
 import { getCachedOrGeneratedPool, saveQuestionPool } from '../data/questionPool';
 
 const CLUSTER_LEADER_PIN = '3781';
@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   CURRENT_USER: 'deca_current_user_v1',
   COMPLETED_EXAMS: 'deca_completed_exams_v1',
   CUSTOM_TESTS: 'deca_custom_tests_v1',
+  CALENDAR_NOTES: 'deca_calendar_notes_v1',
 };
 
 // Clean storage initialization without mock or test users
@@ -312,4 +313,43 @@ export function appendQuestionsToBank(newQuestions: Omit<Question, 'id'>[]): { a
   const updatedPool = [...pool, ...formattedQuestions];
   saveQuestionPool(updatedPool);
   return { added: formattedQuestions.length, total: updatedPool.length };
+}
+
+// Cluster Calendar Notes (2026 - February 2027) - Clean initial state with no test slideshows
+const DEFAULT_CALENDAR_NOTES: CalendarNote[] = [];
+
+export function getCalendarNotes(): CalendarNote[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CALENDAR_NOTES);
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.CALENDAR_NOTES, JSON.stringify([]));
+      return [];
+    }
+    const parsed: CalendarNote[] = JSON.parse(raw);
+    // Purge any lingering demo/test slideshows or initial dummy notes from previous runs
+    const cleaned = parsed.filter(n => !n.id.startsWith('note_init_') && !n.linkUrl?.includes('demo-deca-'));
+    if (cleaned.length !== parsed.length) {
+      localStorage.setItem(STORAGE_KEYS.CALENDAR_NOTES, JSON.stringify(cleaned));
+    }
+    return cleaned;
+  } catch {
+    return [];
+  }
+}
+
+export function saveCalendarNote(note: CalendarNote): void {
+  const notes = getCalendarNotes();
+  const existingIdx = notes.findIndex(n => n.id === note.id);
+  if (existingIdx >= 0) {
+    notes[existingIdx] = { ...note, updatedAt: Date.now() };
+  } else {
+    notes.unshift(note);
+  }
+  localStorage.setItem(STORAGE_KEYS.CALENDAR_NOTES, JSON.stringify(notes));
+}
+
+export function deleteCalendarNote(id: string): void {
+  const notes = getCalendarNotes();
+  const filtered = notes.filter(n => n.id !== id);
+  localStorage.setItem(STORAGE_KEYS.CALENDAR_NOTES, JSON.stringify(filtered));
 }

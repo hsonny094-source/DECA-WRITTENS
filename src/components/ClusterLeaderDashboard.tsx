@@ -29,13 +29,15 @@ import {
   X,
   FileSpreadsheet,
   Trash2,
+  Calendar,
 } from 'lucide-react';
+import { ClusterCalendarView } from './ClusterCalendarView';
 
 interface ClusterLeaderDashboardProps {
   currentUser: User;
   onViewExamDetails: (exam: CompletedExam) => void;
-  activeView?: 'leader_roster' | 'question_bank' | 'create_tests';
-  onTabChange?: (tab: 'leader_roster' | 'question_bank' | 'create_tests') => void;
+  activeView?: 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar';
+  onTabChange?: (tab: 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar') => void;
 }
 
 export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
@@ -44,17 +46,19 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
   activeView,
   onTabChange,
 }) => {
-  const [activeTab, setActiveTab] = useState<'roster' | 'bank' | 'create_upload'>('roster');
+  const [activeTab, setActiveTab] = useState<'roster' | 'calendar' | 'bank' | 'create_upload'>('roster');
 
   useEffect(() => {
     if (activeView === 'leader_roster') setActiveTab('roster');
+    else if (activeView === 'cluster_calendar') setActiveTab('calendar');
     else if (activeView === 'question_bank') setActiveTab('bank');
     else if (activeView === 'create_tests') setActiveTab('create_upload');
   }, [activeView]);
 
-  const switchTab = (tab: 'roster' | 'bank' | 'create_upload') => {
+  const switchTab = (tab: 'roster' | 'calendar' | 'bank' | 'create_upload') => {
     setActiveTab(tab);
     if (tab === 'roster') onTabChange?.('leader_roster');
+    else if (tab === 'calendar') onTabChange?.('cluster_calendar');
     else if (tab === 'bank') onTabChange?.('question_bank');
     else if (tab === 'create_upload') onTabChange?.('create_tests');
   };
@@ -352,6 +356,18 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
           >
             <Users className="w-4 h-4" />
             <span>Students & Scores</span>
+          </button>
+
+          <button
+            type="button"
+            id="tab-btn-calendar"
+            onClick={() => switchTab('calendar')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeTab === 'calendar' ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            <Calendar className="w-4 h-4 text-amber-400" />
+            <span>Calendar & Slides (2026–27)</span>
           </button>
 
           <button
@@ -659,6 +675,13 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB: CALENDAR & GOOGLE SLIDES (2026 - FEB 2027) */}
+      {activeTab === 'calendar' && (
+        <div>
+          <ClusterCalendarView currentUser={currentUser} />
         </div>
       )}
 

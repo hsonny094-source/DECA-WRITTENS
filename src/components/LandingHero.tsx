@@ -12,7 +12,8 @@ import {
   Filter,
   Lock,
   Layers,
-  GraduationCap
+  GraduationCap,
+  Calendar,
 } from 'lucide-react';
 import { InstructionalArea, Question } from '../types';
 import { getCachedOrGeneratedPool, INSTRUCTIONAL_AREAS } from '../data/questionPool';
@@ -22,6 +23,7 @@ interface LandingHeroProps {
   onStartOfficialExam: () => void;
   onStartRandomExam: () => void;
   onStartSprintExam: () => void;
+  onOpenCalendar?: () => void;
 }
 
 export const LandingHero: React.FC<LandingHeroProps> = ({
@@ -29,6 +31,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
   onStartOfficialExam,
   onStartRandomExam,
   onStartSprintExam,
+  onOpenCalendar,
 }) => {
   const [selectedAreaFilter, setSelectedAreaFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -104,6 +107,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
               Authentic classroom testing simulator for DECA Entrepreneurship written events. Practice with the official 100-question exam, randomized pulls from the {pool.length.toLocaleString()}-question bank, and realistic 70-minute competition timing.
             </p>
+
+            {/* Quick access to Cluster Calendar & Google Slides */}
+            {onOpenCalendar && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  id="btn-hero-open-calendar"
+                  onClick={onOpenCalendar}
+                  className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition cursor-pointer"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span>View Cluster Calendar & Google Slides (2026 – Feb 2027)</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -136,7 +155,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Test 1327</span>
                 <h3 className="text-xl font-black text-slate-900">Official Entrepreneurship Exam</h3>
                 <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  The official MBA Research & Curriculum Center® Entrepreneurship exam. Contains authentic questions, performance indicator benchmarks, and complete explanations.
+                  The official DECA Entrepreneurship exam. Contains authentic questions, performance indicator benchmarks, and complete explanations.
                 </p>
               </div>
 
@@ -152,7 +171,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                   <span>70 Minutes</span>
                 </span>
                 <span>•</span>
-                <span>MBA Research</span>
+                <span>Official DECA</span>
               </div>
             </div>
 

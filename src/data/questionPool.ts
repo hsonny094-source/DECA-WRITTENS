@@ -1160,7 +1160,7 @@ const AMOUNTS = ['$100,000', '$250,000', '$50,000', '$500,000', '$75,000'];
 export function generate1000QuestionPool(): Question[] {
   const pool: Question[] = [];
 
-  // 1. Add all 100 official questions from Test 1327 (MBA Research Entrepreneurship Exam)
+  // 1. Add all 100 official questions from Test 1327 (Official DECA Entrepreneurship Exam)
   OFFICIAL_EXAM_1327.forEach((officialQ, idx) => {
     pool.push({
       ...officialQ,
