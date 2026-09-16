@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Question, CompletedExam, User } from '../types';
 import { calculateAreaBreakdown } from '../services/storage';
+import { PacingMeter } from './PacingMeter';
 import {
   Clock,
   Flag,
@@ -12,7 +13,8 @@ import {
   Play,
   Grid,
   HelpCircle,
-  X
+  X,
+  Timer
 } from 'lucide-react';
 
 interface ExamRunnerProps {
@@ -41,8 +43,9 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   const [showGridDrawer, setShowGridDrawer] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'unanswered' | 'flagged'>('all');
+  const [questionDwellSeconds, setQuestionDwellSeconds] = useState<Record<number, number>>({});
 
-  // Countdown timer
+  // Countdown timer & question dwell timer
   useEffect(() => {
     if (isPaused || secondsRemaining <= 0) return;
 
@@ -55,10 +58,19 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         }
         return prev - 1;
       });
+
+      // Track dwell time for active question
+      const currentQId = questions[currentIndex]?.id;
+      if (currentQId !== undefined) {
+        setQuestionDwellSeconds(prev => ({
+          ...prev,
+          [currentQId]: (prev[currentQId] || 0) + 1,
+        }));
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isPaused, secondsRemaining]);
+  }, [isPaused, secondsRemaining, currentIndex, questions]);
 
   // Keyboard navigation for A, B, C, D and arrows
   useEffect(() => {
@@ -124,6 +136,17 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     const percentage = Math.round((score / questions.length) * 100);
     const areaBreakdown = calculateAreaBreakdown(questions, answers);
 
+    const answeredCount = Object.keys(answers).length;
+    const targetPace = Math.round(totalSeconds / questions.length);
+    const avgPace = answeredCount > 0 ? Math.round(timeSpent / answeredCount) : targetPace;
+    const pacingRating: 'Ahead of Pace' | 'Optimal Cadence' | 'Overtime Risk' =
+      avgPace < targetPace - 5
+        ? 'Ahead of Pace'
+        : avgPace > targetPace + 4
+        ? 'Overtime Risk'
+        : 'Optimal Cadence';
+    const projectedBufferMinutes = Math.round((totalSeconds - avgPace * questions.length) / 60);
+
     const completed: CompletedExam = {
       id: `exam_${Date.now()}`,
       studentId: currentUser.id,
@@ -138,7 +161,14 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       answers,
       questions,
       areaBreakdown,
-      sharedWithLeader: false,
+      sharedWithLeader: true,
+      pacingMetrics: {
+        averageSecondsPerQuestion: avgPace,
+        targetSecondsPerQuestion: targetPace,
+        pacingRating,
+        questionTimeSeconds: questionDwellSeconds,
+        projectedBufferMinutes,
+      },
     };
 
     onCompleteExam(completed);
@@ -164,7 +194,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     <div className="min-h-[calc(100vh-4rem)] bg-slate-100 flex flex-col justify-between select-none">
       {/* Top Exam Header */}
       <div className="sticky top-16 z-30 bg-white border-b border-slate-200 shadow-xs px-4 sm:px-6 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           {/* Left: Test info & Progress */}
           <div className="flex items-center space-x-4">
             <div>
@@ -173,17 +203,30 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   DECA Entrepreneurship Exam
                 </span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold">
-                  100 Questions
+                  {questions.length} Questions
                 </span>
               </div>
               <div className="text-xs text-slate-500 hidden sm:block">
-                Answered: <strong className="text-slate-700">{answeredCount}</strong>/100 •{' '}
+                Answered: <strong className="text-slate-700">{answeredCount}</strong>/{questions.length} •{' '}
                 Remaining: <strong className="text-slate-700">{unansweredCount}</strong>
               </div>
             </div>
           </div>
 
-          {/* Center: Timer */}
+          {/* Center: Live Pacing Velocity Meter */}
+          <div className="flex items-center">
+            <PacingMeter
+              elapsedSeconds={totalSeconds - secondsRemaining}
+              secondsRemaining={secondsRemaining}
+              totalSeconds={totalSeconds}
+              totalQuestions={questions.length}
+              currentIndex={currentIndex}
+              answeredCount={answeredCount}
+              currentQuestionDwellSeconds={questionDwellSeconds[currentQ?.id] || 0}
+            />
+          </div>
+
+          {/* Right: Timer & Actions */}
           <div className="flex items-center space-x-2">
             <div
               className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-xl border text-sm sm:text-base font-mono font-bold tracking-wider transition ${
@@ -202,18 +245,15 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               id="btn-pause-exam"
               onClick={() => setIsPaused(!isPaused)}
               title={isPaused ? 'Resume Exam' : 'Pause Exam'}
-              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
             >
               {isPaused ? <Play className="w-4 h-4 text-emerald-600" /> : <Pause className="w-4 h-4 text-slate-600" />}
             </button>
-          </div>
 
-          {/* Right: Grid Drawer toggle & Submit */}
-          <div className="flex items-center space-x-2">
             <button
               id="btn-open-grid"
               onClick={() => setShowGridDrawer(!showGridDrawer)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-medium transition"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-medium transition cursor-pointer"
             >
               <Grid className="w-4 h-4 text-blue-600" />
               <span className="hidden sm:inline">Review Matrix</span>
@@ -223,7 +263,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             <button
               id="btn-submit-exam-open"
               onClick={() => setShowSubmitModal(true)}
-              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold transition shadow-sm"
+              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Submit</span>
@@ -252,7 +292,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             <button
               id="btn-resume-exam"
               onClick={() => setIsPaused(false)}
-              className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition"
+              className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition cursor-pointer"
             >
               Resume 70-Minute Exam
             </button>
@@ -261,12 +301,24 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 flex flex-col justify-between relative">
             {/* Top metadata row */}
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-slate-900 text-white">
                   Question {currentIndex + 1} of {questions.length}
                 </span>
                 <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 border border-blue-200">
                   {currentQ.instructionalArea}
+                </span>
+                {/* Live Question Dwell Telemetry */}
+                <span
+                  className={`text-xs font-mono font-semibold px-2 py-0.5 rounded-md flex items-center space-x-1 ${
+                    (questionDwellSeconds[currentQ.id] || 0) >= 60
+                      ? 'bg-amber-100 text-amber-900 border border-amber-300 animate-pulse'
+                      : 'bg-slate-100 text-slate-600'
+                  }`}
+                  title="Time spent on this specific question (Target: 42s)"
+                >
+                  <Timer className={`w-3 h-3 ${(questionDwellSeconds[currentQ.id] || 0) >= 60 ? 'text-amber-600' : 'text-slate-400'}`} />
+                  <span>{questionDwellSeconds[currentQ.id] || 0}s dwell</span>
                 </span>
                 {currentQ.year && (
                   <span className="text-xs font-medium text-slate-500 hidden md:inline">
@@ -279,7 +331,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               <button
                 id="btn-flag-question"
                 onClick={() => toggleFlag(currentQ.id)}
-                className={`flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-medium transition ${
+                className={`flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-medium transition cursor-pointer ${
                   flagged.has(currentQ.id)
                     ? 'bg-amber-100 text-amber-800 border border-amber-300'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
@@ -295,6 +347,25 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               <div className="text-xs font-mono text-slate-500 mb-4 bg-slate-50 p-2 rounded-lg border border-slate-200 flex items-center space-x-2">
                 <HelpCircle className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                 <span>Standard: {currentQ.indicator}</span>
+              </div>
+            )}
+
+            {/* Lingering Pacing Alert Banner if question dwell >= 60s */}
+            {(questionDwellSeconds[currentQ.id] || 0) >= 60 && (
+              <div className="mb-4 p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-in fade-in duration-200">
+                <div className="flex items-center space-x-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>
+                    <strong>Pacing Alert ({questionDwellSeconds[currentQ.id]}s):</strong> You are lingering past the 42s benchmark. In DECA testing, make your best educated guess, flag (F), and keep your forward pace!
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleFlag(currentQ.id)}
+                  className="px-2.5 py-1 rounded-lg bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold text-[11px] self-start sm:self-auto shrink-0 transition cursor-pointer"
+                >
+                  {flagged.has(currentQ.id) ? 'Flagged ✓' : 'Flag Question'}
+                </button>
               </div>
             )}
 

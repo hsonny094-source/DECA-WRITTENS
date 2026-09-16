@@ -43,6 +43,14 @@ export interface AreaPerformance {
   percentage: number;
 }
 
+export interface PacingMetrics {
+  averageSecondsPerQuestion: number;
+  targetSecondsPerQuestion: number;
+  pacingRating: 'Ahead of Pace' | 'Optimal Cadence' | 'Overtime Risk';
+  questionTimeSeconds?: Record<number, number>;
+  projectedBufferMinutes?: number;
+}
+
 export interface CompletedExam {
   id: string;
   studentId: string;
@@ -60,6 +68,7 @@ export interface CompletedExam {
   sharedWithLeader: boolean;
   sharedAt?: number;
   studentNotes?: string;
+  pacingMetrics?: PacingMetrics;
 }
 
 export interface CustomTest {
@@ -83,6 +92,28 @@ export interface ClusterStudentSummary {
   sharedExams: CompletedExam[];
   weakestArea?: string;
   strongestArea?: string;
+  rank?: number;
+  rankOrdinal?: string;
+}
+
+export interface RankedSharedExam {
+  rank: number;
+  rankOrdinal: string;
+  rankLabel: string;
+  exam: CompletedExam;
+}
+
+export interface ExamLiveRankInfo {
+  rank: number;
+  totalCount: number;
+  rankOrdinal: string;
+  rankLabel: string;
+  higherScoresCount: number;
+  isTopRank: boolean;
+  isTop3: boolean;
+  topScore: number;
+  sameScoreCount: number;
+  allRankedExams: RankedSharedExam[];
 }
 
 export type CalendarTag = 'slides' | 'meeting' | 'exam' | 'deadline' | 'notes' | 'resource';
@@ -99,4 +130,28 @@ export interface CalendarNote {
   authorName: string;
   createdAt: number;
   updatedAt?: number;
+}
+
+export type ResourceCategory =
+  | 'study_guide'
+  | 'formula_sheet'
+  | 'vocab_quizlet'
+  | 'exam_blueprint'
+  | 'tips_strategy'
+  | 'official_deca'
+  | 'other';
+
+export interface DecaResource {
+  id: string;
+  title: string;
+  description: string;
+  category: ResourceCategory;
+  url?: string;
+  notes?: string;
+  tags: string[];
+  authorName: string;
+  authorId: string;
+  createdAt: number;
+  updatedAt?: number;
+  isPinned?: boolean;
 }

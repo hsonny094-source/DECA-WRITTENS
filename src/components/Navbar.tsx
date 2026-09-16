@@ -14,12 +14,22 @@ import {
   Layers,
   Lock,
   Calendar,
+  Sparkles,
 } from 'lucide-react';
+
+export type ActiveNavView =
+  | 'take_exam'
+  | 'student_dashboard'
+  | 'leader_roster'
+  | 'question_bank'
+  | 'create_tests'
+  | 'cluster_calendar'
+  | 'resources';
 
 interface NavbarProps {
   currentUser: User | null;
-  activeView: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar';
-  onSelectView: (view: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar') => void;
+  activeView: ActiveNavView;
+  onSelectView: (view: ActiveNavView) => void;
   onOpenAuth: (role?: 'student' | 'cluster_leader') => void;
   onLogout: () => void;
   onStartExam: () => void;
@@ -39,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleNavClick = (view: 'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar') => {
+  const handleNavClick = (view: ActiveNavView) => {
     setMobileMenuOpen(false);
     onSelectView(view);
   };
@@ -117,6 +127,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 text-emerald-400 border border-slate-700">
                   {totalQuestions.toLocaleString()}
                 </span>
+              </button>
+
+              {/* Study Resources Hub - Accessible to all */}
+              <button
+                type="button"
+                id="nav-resources-btn"
+                onClick={() => handleNavClick('resources')}
+                className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                  activeView === 'resources'
+                    ? currentUser?.role === 'cluster_leader' ? 'bg-amber-600 text-white shadow-sm' : 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>Resources</span>
               </button>
 
               {/* Student specific link */}
@@ -322,6 +347,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-emerald-400 border border-slate-700">
               {totalQuestions.toLocaleString()}
             </span>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-resources"
+            onClick={() => handleNavClick('resources')}
+            className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition cursor-pointer ${
+              activeView === 'resources' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>Study Resources & Reference Hub</span>
           </button>
 
           {currentUser?.role === 'student' && (

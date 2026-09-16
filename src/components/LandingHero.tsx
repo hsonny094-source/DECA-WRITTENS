@@ -24,6 +24,7 @@ interface LandingHeroProps {
   onStartRandomExam: () => void;
   onStartSprintExam: () => void;
   onOpenCalendar?: () => void;
+  onOpenResources?: () => void;
 }
 
 export const LandingHero: React.FC<LandingHeroProps> = ({
@@ -32,6 +33,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
   onStartRandomExam,
   onStartSprintExam,
   onOpenCalendar,
+  onOpenResources,
 }) => {
   const [selectedAreaFilter, setSelectedAreaFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -108,9 +110,9 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               Authentic classroom testing simulator for DECA Entrepreneurship written events. Practice with the official 100-question exam, randomized pulls from the {pool.length.toLocaleString()}-question bank, and realistic 70-minute competition timing.
             </p>
 
-            {/* Quick access to Cluster Calendar & Google Slides */}
-            {onOpenCalendar && (
-              <div className="pt-2">
+            {/* Quick access to Cluster Calendar & Study Resources */}
+            <div className="pt-2 flex flex-wrap items-center gap-2.5">
+              {onOpenCalendar && (
                 <button
                   type="button"
                   id="btn-hero-open-calendar"
@@ -118,11 +120,24 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                   className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition cursor-pointer"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span>View Cluster Calendar & Google Slides (2026 – Feb 2027)</span>
+                  <span>View Cluster Calendar & Slides (2026–27)</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
-              </div>
-            )}
+              )}
+
+              {onOpenResources && (
+                <button
+                  type="button"
+                  id="btn-hero-open-resources"
+                  onClick={onOpenResources}
+                  className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 transition cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>Formulas & Study Guides Hub</span>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

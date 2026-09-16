@@ -3,10 +3,12 @@ import { User, CompletedExam, Question, InstructionalArea, CustomTest } from '..
 import {
   getClusterLeaderStudentSummaries,
   getCompletedExams,
+  getRankedSharedExams,
   appendQuestionsToBank,
   saveCustomTest,
   getCustomTests,
   deleteStudent,
+  deleteCompletedExam,
 } from '../services/storage';
 import { getCachedOrGeneratedPool, INSTRUCTIONAL_AREAS } from '../data/questionPool';
 import { SmartQuestionUploader } from './SmartQuestionUploader';
@@ -30,6 +32,7 @@ import {
   FileSpreadsheet,
   Trash2,
   Calendar,
+  Trophy,
 } from 'lucide-react';
 import { ClusterCalendarView } from './ClusterCalendarView';
 
@@ -67,7 +70,21 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
   const [studentSummaries, setStudentSummaries] = useState(getClusterLeaderStudentSummaries());
   const [selectedStudentExams, setSelectedStudentExams] = useState<{ studentName: string; exams: CompletedExam[] } | null>(null);
   const [studentToDelete, setStudentToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [examToDelete, setExamToDelete] = useState<CompletedExam | null>(null);
   const [rosterNotification, setRosterNotification] = useState<string | null>(null);
+  const [rosterSubView, setRosterSubView] = useState<'roster' | 'leaderboard'>('roster');
+  const [leaderboardFilter, setLeaderboardFilter] = useState<string>('all');
+
+  // Available unique exam titles for filtering
+  const availableExamTitles = useMemo(() => {
+    const allShared = getCompletedExams().filter(e => e.sharedWithLeader);
+    return Array.from(new Set(allShared.map(e => e.examTitle)));
+  }, [studentSummaries]);
+
+  // Ranked shared exams list
+  const rankedSharedExams = useMemo(() => {
+    return getRankedSharedExams(leaderboardFilter);
+  }, [leaderboardFilter, studentSummaries]);
 
   // Question bank state
   const [questionPool, setQuestionPool] = useState<Question[]>(() => getCachedOrGeneratedPool());
@@ -115,6 +132,31 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
       setTimeout(() => setRosterNotification(null), 4000);
     }
     setStudentToDelete(null);
+  };
+
+  const handleConfirmDeleteExam = () => {
+    if (!examToDelete) return;
+    const examTitle = examToDelete.examTitle;
+    const studentName = examToDelete.studentName;
+    const score = examToDelete.score;
+    const ok = deleteCompletedExam(examToDelete.id);
+    if (ok) {
+      refreshRoster();
+      if (selectedStudentExams) {
+        const remaining = selectedStudentExams.exams.filter(e => e.id !== examToDelete.id);
+        if (remaining.length === 0) {
+          setSelectedStudentExams(null);
+        } else {
+          setSelectedStudentExams({
+            ...selectedStudentExams,
+            exams: remaining,
+          });
+        }
+      }
+      setRosterNotification(`Deleted "${examTitle}" attempt (${score}/100) by ${studentName}. Live leaderboard rankings recalibrated.`);
+      setTimeout(() => setRosterNotification(null), 4000);
+    }
+    setExamToDelete(null);
   };
 
   // Filter question pool
@@ -445,124 +487,321 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
             </div>
           )}
 
-          {/* Student Table */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-bold text-slate-900">Student Performance Roster</h2>
-                <p className="text-xs text-slate-500">
-                  Scores shared directly by students from their 100-question Entrepreneurship exam simulations
-                </p>
-              </div>
+          {/* Sub-view toggle & Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="flex items-center space-x-2">
               <button
-                onClick={refreshRoster}
-                className="px-3.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                id="btn-roster-subview-students"
+                onClick={() => setRosterSubView('roster')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
+                  rosterSubView === 'roster'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
               >
-                Refresh Scores
+                <Users className="w-4 h-4" />
+                <span>Ranked Student Roster ({studentSummaries.length})</span>
+              </button>
+
+              <button
+                id="btn-roster-subview-leaderboard"
+                onClick={() => setRosterSubView('leaderboard')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
+                  rosterSubView === 'leaderboard'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                <Trophy className="w-4 h-4" />
+                <span>Shared Exams Leaderboard ({rankedSharedExams.length})</span>
               </button>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200 font-semibold">
-                    <th className="py-3.5 px-6">Student Name</th>
-                    <th className="py-3.5 px-6">Shared Exams</th>
-                    <th className="py-3.5 px-6">Average Score</th>
-                    <th className="py-3.5 px-6">High Score</th>
-                    <th className="py-3.5 px-6">Identified Weak Area</th>
-                    <th className="py-3.5 px-6 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-sm">
-                  {studentSummaries.map(s => {
-                    const hasExams = s.totalExams > 0;
-                    return (
-                      <tr key={s.student.id} className="hover:bg-slate-50/60 transition">
-                        <td className="py-4 px-6">
-                          <div className="font-bold text-slate-900">{s.student.name}</div>
-                          <div className="text-xs text-slate-500">@{s.student.username}</div>
-                        </td>
+            <div className="flex items-center space-x-2">
+              {rosterSubView === 'leaderboard' && (
+                <div className="flex items-center space-x-2">
+                  <Filter className="w-3.5 h-3.5 text-slate-400" />
+                  <select
+                    id="select-leaderboard-exam-filter"
+                    value={leaderboardFilter}
+                    onChange={e => setLeaderboardFilter(e.target.value)}
+                    className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  >
+                    <option value="all">All Shared Exam Types ({getRankedSharedExams('all').length})</option>
+                    {availableExamTitles.map(title => (
+                      <option key={title} value={title}>
+                        {title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
-                        <td className="py-4 px-6">
-                          <span className="font-semibold text-slate-800">{s.totalExams}</span>
-                          <span className="text-xs text-slate-500 ml-1">tests</span>
-                        </td>
-
-                        <td className="py-4 px-6">
-                          {hasExams ? (
-                            <span
-                              className={`font-black ${
-                                s.averageScore >= 80
-                                  ? 'text-emerald-600'
-                                  : s.averageScore >= 70
-                                  ? 'text-blue-600'
-                                  : 'text-amber-600'
-                              }`}
-                            >
-                              {s.averageScore}/100
-                            </span>
-                          ) : (
-                            <span className="text-xs text-slate-400">No exams yet</span>
-                          )}
-                        </td>
-
-                        <td className="py-4 px-6">
-                          {hasExams ? (
-                            <span className="font-bold text-slate-900">{s.highestScore}/100</span>
-                          ) : (
-                            <span className="text-xs text-slate-400">—</span>
-                          )}
-                        </td>
-
-                        <td className="py-4 px-6">
-                          {s.weakestArea ? (
-                            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
-                              {s.weakestArea}
-                            </span>
-                          ) : (
-                            <span className="text-xs text-slate-400">Not enough data</span>
-                          )}
-                        </td>
-
-                        <td className="py-4 px-6 text-right">
-                          <div className="flex items-center justify-end space-x-2">
-                            <button
-                              disabled={!hasExams}
-                              onClick={() =>
-                                setSelectedStudentExams({
-                                  studentName: s.student.name,
-                                  exams: s.sharedExams,
-                                })
-                              }
-                              className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                                hasExams
-                                  ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
-                                  : 'opacity-40 cursor-not-allowed bg-slate-100 text-slate-400'
-                              }`}
-                            >
-                              <span>View Tests ({s.totalExams})</span>
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
-
-                            <button
-                              type="button"
-                              id={`btn-delete-student-${s.student.id}`}
-                              title={`Remove ${s.student.name} from roster`}
-                              onClick={() => setStudentToDelete({ id: s.student.id, name: s.student.name })}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <button
+                onClick={refreshRoster}
+                className="px-3.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
+              >
+                Refresh
+              </button>
             </div>
           </div>
+
+          {/* Student Table (Ranked) */}
+          {rosterSubView === 'roster' && (
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+              <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                    <span>Student Performance Roster</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                      Ranked by High Score
+                    </span>
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Students ranked sequentially from highest shared score to lowest.
+                  </p>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200 font-semibold">
+                      <th className="py-3.5 px-6">Rank</th>
+                      <th className="py-3.5 px-6">Student Name</th>
+                      <th className="py-3.5 px-6">Shared Exams</th>
+                      <th className="py-3.5 px-6">Average Score</th>
+                      <th className="py-3.5 px-6">High Score</th>
+                      <th className="py-3.5 px-6">Identified Weak Area</th>
+                      <th className="py-3.5 px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-sm">
+                    {studentSummaries.map(s => {
+                      const hasExams = s.totalExams > 0;
+                      return (
+                        <tr key={s.student.id} className="hover:bg-slate-50/60 transition">
+                          <td className="py-4 px-6 whitespace-nowrap">
+                            {s.rank ? (
+                              <span
+                                className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg font-black text-xs ${
+                                  s.rank === 1
+                                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                                    : s.rank === 2
+                                    ? 'bg-slate-200 text-slate-800 border border-slate-300'
+                                    : s.rank === 3
+                                    ? 'bg-amber-50 text-amber-900 border border-amber-200'
+                                    : 'bg-slate-100 text-slate-700'
+                                }`}
+                              >
+                                <span>{s.rank === 1 ? '🥇 #1' : s.rank === 2 ? '🥈 #2' : s.rank === 3 ? '🥉 #3' : `#${s.rank}`}</span>
+                                <span className="text-[10px] font-normal text-slate-500">({s.rankOrdinal})</span>
+                              </span>
+                            ) : (
+                              <span className="text-xs text-slate-400 font-medium">—</span>
+                            )}
+                          </td>
+
+                          <td className="py-4 px-6">
+                            <div className="font-bold text-slate-900">{s.student.name}</div>
+                            <div className="text-xs text-slate-500">@{s.student.username}</div>
+                          </td>
+
+                          <td className="py-4 px-6">
+                            <span className="font-semibold text-slate-800">{s.totalExams}</span>
+                            <span className="text-xs text-slate-500 ml-1">tests</span>
+                          </td>
+
+                          <td className="py-4 px-6">
+                            {hasExams ? (
+                              <span
+                                className={`font-black ${
+                                  s.averageScore >= 80
+                                    ? 'text-emerald-600'
+                                    : s.averageScore >= 70
+                                    ? 'text-blue-600'
+                                    : 'text-amber-600'
+                                }`}
+                              >
+                                {s.averageScore}/100
+                              </span>
+                            ) : (
+                              <span className="text-xs text-slate-400">No exams yet</span>
+                            )}
+                          </td>
+
+                          <td className="py-4 px-6">
+                            {hasExams ? (
+                              <span className="font-bold text-slate-900">{s.highestScore}/100</span>
+                            ) : (
+                              <span className="text-xs text-slate-400">—</span>
+                            )}
+                          </td>
+
+                          <td className="py-4 px-6">
+                            {s.weakestArea ? (
+                              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+                                {s.weakestArea}
+                              </span>
+                            ) : (
+                              <span className="text-xs text-slate-400">Not enough data</span>
+                            )}
+                          </td>
+
+                          <td className="py-4 px-6 text-right">
+                            <div className="flex items-center justify-end space-x-2">
+                              <button
+                                disabled={!hasExams}
+                                onClick={() =>
+                                  setSelectedStudentExams({
+                                    studentName: s.student.name,
+                                    exams: s.sharedExams,
+                                  })
+                                }
+                                className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                                  hasExams
+                                    ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
+                                    : 'opacity-40 cursor-not-allowed bg-slate-100 text-slate-400'
+                                }`}
+                              >
+                                <span>View Tests ({s.totalExams})</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                              </button>
+
+                              <button
+                                type="button"
+                                id={`btn-delete-student-${s.student.id}`}
+                                title={`Remove ${s.student.name} from roster`}
+                                onClick={() => setStudentToDelete({ id: s.student.id, name: s.student.name })}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Shared Exams Leaderboard Table (Highest to Lowest) */}
+          {rosterSubView === 'leaderboard' && (
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+              <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center space-x-2 text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">
+                    <Trophy className="w-4 h-4" />
+                    <span>Official Cluster Standings</span>
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-900">
+                    Shared Exams Leaderboard (Ranked Highest to Lowest)
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Live dynamic ranking: as students submit tests with higher scores, rankings update and shift in real time.
+                  </p>
+                </div>
+              </div>
+
+              {rankedSharedExams.length === 0 ? (
+                <div className="p-12 text-center">
+                  <Trophy className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                  <h3 className="font-bold text-slate-800 text-sm">No Shared Exams Found</h3>
+                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                    When students complete 100-question written exams and share them with the cluster leader, they will appear here ranked from highest score to lowest.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200 font-semibold">
+                        <th className="py-3.5 px-6">Rank</th>
+                        <th className="py-3.5 px-6">Student Name</th>
+                        <th className="py-3.5 px-6">Exam Title</th>
+                        <th className="py-3.5 px-6 text-right">Score</th>
+                        <th className="py-3.5 px-6 text-right">Accuracy</th>
+                        <th className="py-3.5 px-6 text-right">Time Spent</th>
+                        <th className="py-3.5 px-6 text-right">Date Completed</th>
+                        <th className="py-3.5 px-6 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm">
+                      {rankedSharedExams.map(entry => (
+                        <tr key={entry.exam.id} className="hover:bg-slate-50/70 transition">
+                          <td className="py-4 px-6 whitespace-nowrap">
+                            <span
+                              className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg font-black text-xs ${
+                                entry.rank === 1
+                                  ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                                  : entry.rank === 2
+                                  ? 'bg-slate-200 text-slate-800 border border-slate-300'
+                                  : entry.rank === 3
+                                  ? 'bg-amber-50 text-amber-900 border border-amber-200'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
+                            >
+                              <span>{entry.rank === 1 ? '🥇 #1' : entry.rank === 2 ? '🥈 #2' : entry.rank === 3 ? '🥉 #3' : `#${entry.rank}`}</span>
+                              <span className="text-[10px] font-normal text-slate-500">({entry.rankOrdinal} Highest)</span>
+                            </span>
+                          </td>
+
+                          <td className="py-4 px-6 font-bold text-slate-900 whitespace-nowrap">
+                            {entry.exam.studentName}
+                          </td>
+
+                          <td className="py-4 px-6 text-xs text-slate-600 font-medium">
+                            {entry.exam.examTitle}
+                          </td>
+
+                          <td className="py-4 px-6 text-right font-black text-slate-900 whitespace-nowrap">
+                            <span className="text-base text-blue-600">{entry.exam.score}</span>
+                            <span className="text-xs text-slate-400 font-normal">/100</span>
+                          </td>
+
+                          <td className="py-4 px-6 text-right text-xs font-semibold text-slate-700 whitespace-nowrap">
+                            {entry.exam.percentage}%
+                          </td>
+
+                          <td className="py-4 px-6 text-right text-xs text-slate-500 whitespace-nowrap">
+                            {Math.round(entry.exam.timeSpentSeconds / 60)} min
+                          </td>
+
+                          <td className="py-4 px-6 text-right text-xs text-slate-400 whitespace-nowrap">
+                            {new Date(entry.exam.completedAt).toLocaleDateString()}
+                          </td>
+
+                          <td className="py-4 px-6 text-right whitespace-nowrap">
+                            <div className="flex items-center justify-end space-x-2">
+                              <button
+                                onClick={() => onViewExamDetails(entry.exam)}
+                                className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition cursor-pointer"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>Inspect Exam</span>
+                              </button>
+                              <button
+                                type="button"
+                                id={`btn-delete-exam-${entry.exam.id}`}
+                                title={`Delete ${entry.exam.studentName}'s score of ${entry.exam.score}/100`}
+                                onClick={() => setExamToDelete(entry.exam)}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Student Shared Exams Modal */}
           {selectedStudentExams && (
@@ -610,8 +849,8 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
                         )}
                       </div>
 
-                      <div className="flex items-center space-x-3 shrink-0">
-                        <div className="text-right">
+                      <div className="flex items-center space-x-2 shrink-0">
+                        <div className="text-right mr-1">
                           <div className="text-xl font-black text-blue-600">
                             {exam.score}/100
                           </div>
@@ -623,10 +862,20 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
                             setSelectedStudentExams(null);
                             onViewExamDetails(exam);
                           }}
-                          className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold"
+                          className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer"
                         >
                           <Eye className="w-3.5 h-3.5" />
                           <span>Inspect Exam</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          id={`btn-modal-delete-exam-${exam.id}`}
+                          title={`Delete this attempt (${exam.score}/100)`}
+                          onClick={() => setExamToDelete(exam)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
@@ -670,6 +919,69 @@ export const ClusterLeaderDashboard: React.FC<ClusterLeaderDashboardProps> = ({
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Yes, Remove Student</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Exam Attempt Confirmation Modal */}
+          {examToDelete && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+              <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-7 border border-slate-200 space-y-4">
+                <div className="flex items-center space-x-3 text-rose-600">
+                  <div className="w-10 h-10 rounded-2xl bg-rose-100 flex items-center justify-center shrink-0">
+                    <Trash2 className="w-5 h-5 text-rose-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">Delete Exam Attempt</h3>
+                    <p className="text-xs text-slate-500">Cluster Leader Administration</p>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Are you sure you want to delete this <strong className="text-slate-900">{examToDelete.examTitle}</strong> attempt by <strong className="text-slate-900">{examToDelete.studentName}</strong>?
+                </p>
+
+                <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Candidate:</span>
+                    <strong className="text-slate-800 font-semibold">{examToDelete.studentName}</strong>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Score & Accuracy:</span>
+                    <strong className="text-blue-700 font-bold">{examToDelete.score}/100 ({examToDelete.percentage}%)</strong>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Time Recorded:</span>
+                    <span className="font-mono text-slate-700">{Math.round(examToDelete.timeSpentSeconds / 60)} min</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Completed Date:</span>
+                    <span className="text-slate-700">{new Date(examToDelete.completedAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-rose-600 font-medium bg-rose-50 p-2.5 rounded-xl border border-rose-200">
+                  ⚠️ This attempt will be permanently removed from the shared leaderboard and candidate records, recalculating live rankings instantly.
+                </p>
+
+                <div className="flex items-center justify-end space-x-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setExamToDelete(null)}
+                    className="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-confirm-delete-exam"
+                    onClick={handleConfirmDeleteExam}
+                    className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition flex items-center space-x-1.5 shadow-sm cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Yes, Delete Attempt</span>
                   </button>
                 </div>
               </div>

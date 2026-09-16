@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CompletedExam } from '../types';
-import { toggleShareExam } from '../services/storage';
+import { toggleShareExam, getExamLiveRank } from '../services/storage';
 import confetti from 'canvas-confetti';
 import {
   Trophy,
@@ -13,24 +13,58 @@ import {
   Filter,
   HelpCircle,
   MessageSquare,
-  Sparkles
+  Sparkles,
+  TrendingUp,
+  Flame,
+  Gauge,
+  Timer,
+  Zap,
+  Activity,
 } from 'lucide-react';
 
 interface ExamResultsProps {
   exam: CompletedExam;
   onGoToDashboard: () => void;
   onRetakeExam: () => void;
+  onRetestMissed?: (exam: CompletedExam) => void;
+  onRetestWeakArea?: (area: string) => void;
+  onOpenResources?: () => void;
 }
 
 export const ExamResults: React.FC<ExamResultsProps> = ({
   exam,
   onGoToDashboard,
   onRetakeExam,
+  onRetestMissed,
+  onRetestWeakArea,
+  onOpenResources,
 }) => {
   const [isShared, setIsShared] = useState(exam.sharedWithLeader);
   const [studentNotes, setStudentNotes] = useState(exam.studentNotes || '');
   const [reviewFilter, setReviewFilter] = useState<'all' | 'incorrect' | 'correct'>('all');
   const [showShareSuccess, setShowShareSuccess] = useState(false);
+
+  const rankInfo = getExamLiveRank({ ...exam, sharedWithLeader: isShared });
+
+  // Missed questions
+  const missedQuestions = exam.questions.filter(q => exam.answers[q.id] !== q.correctAnswer);
+
+  // Lowest instructional area
+  const lowestArea = exam.areaBreakdown && exam.areaBreakdown.length > 0
+    ? [...exam.areaBreakdown].sort((a, b) => a.percentage - b.percentage)[0]
+    : null;
+
+  // Pacing Velocity Diagnostics
+  const totalQuestionsCount = exam.totalQuestions || exam.questions.length || 100;
+  const avgPace = exam.pacingMetrics?.averageSecondsPerQuestion || Math.round(exam.timeSpentSeconds / totalQuestionsCount);
+  const targetPace = exam.pacingMetrics?.targetSecondsPerQuestion || 42;
+  const pacingRating = exam.pacingMetrics?.pacingRating || (avgPace < targetPace - 5 ? 'Ahead of Pace' : avgPace > targetPace + 4 ? 'Overtime Risk' : 'Optimal Cadence');
+  const bufferMinutes = exam.pacingMetrics?.projectedBufferMinutes ?? Math.round((4200 - exam.timeSpentSeconds) / 60);
+
+  const dwellRecords = exam.pacingMetrics?.questionTimeSeconds || {};
+  const dwellValues = Object.values(dwellRecords) as number[];
+  const lingeringQuestionsCount = dwellValues.filter(sec => sec >= 60).length;
+  const rapidQuestionsCount = dwellValues.filter(sec => sec > 0 && sec < 30).length;
 
   useEffect(() => {
     if (exam.score >= 70) {
@@ -159,31 +193,222 @@ export const ExamResults: React.FC<ExamResultsProps> = ({
             <p className="text-xs text-slate-600 leading-relaxed">{tierDesc}</p>
           </div>
 
-          {/* Time & Accuracy */}
+          {/* Time & Pacing Velocity */}
           <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col justify-around">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
               <span className="text-xs text-slate-500 flex items-center space-x-1">
-                <Clock className="w-3.5 h-3.5" />
-                <span>Pace per Question:</span>
+                <Gauge className="w-3.5 h-3.5 text-blue-600" />
+                <span>Pacing Velocity:</span>
               </span>
-              <strong className="text-xs text-slate-800">
-                {Math.round(exam.timeSpentSeconds / 100)}s / question
-              </strong>
+              <div className="text-right">
+                <strong className="text-xs font-mono text-slate-900 block">
+                  {avgPace}s / question
+                </strong>
+                <span
+                  className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider ${
+                    pacingRating === 'Ahead of Pace'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : pacingRating === 'Overtime Risk'
+                      ? 'bg-rose-100 text-rose-800'
+                      : 'bg-blue-100 text-blue-800'
+                  }`}
+                >
+                  {pacingRating}
+                </span>
+              </div>
             </div>
             <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
               <span className="text-xs text-slate-500 flex items-center space-x-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Correct:</span>
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                <span>Time Spent:</span>
               </span>
-              <strong className="text-xs text-emerald-700">{exam.score} questions</strong>
+              <strong className="text-xs text-slate-800 font-mono">
+                {formatTime(exam.timeSpentSeconds)} / 70m
+              </strong>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-slate-500 flex items-center space-x-1">
-                <XCircle className="w-3.5 h-3.5 text-rose-600" />
-                <span>Incorrect:</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Accuracy:</span>
               </span>
-              <strong className="text-xs text-rose-700">{100 - exam.score} questions</strong>
+              <strong className="text-xs text-emerald-700 font-bold">
+                {exam.score} / {totalQuestionsCount} ({exam.percentage}%)
+              </strong>
             </div>
+          </div>
+        </div>
+
+        {/* Live Cluster Leaderboard Standing & Dynamic Rank Card */}
+        <div className="mt-6 p-6 rounded-3xl bg-gradient-to-br from-amber-50/70 via-slate-50 to-blue-50/40 border-2 border-amber-300/70 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start space-x-4">
+              <div
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
+                  rankInfo.rank === 1
+                    ? 'bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-amber-200'
+                    : rankInfo.rank === 2
+                    ? 'bg-gradient-to-br from-slate-400 to-slate-600 text-white'
+                    : rankInfo.rank === 3
+                    ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-white'
+                    : 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white'
+                }`}
+              >
+                <Trophy className="w-7 h-7" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                    Live Cluster Rank
+                  </span>
+                  <span className="text-xs text-slate-500 font-medium">
+                    {rankInfo.totalCount} Shared Student Submission{rankInfo.totalCount === 1 ? '' : 's'}
+                  </span>
+                </div>
+
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-baseline gap-2.5">
+                  <span>Rank: {rankInfo.rankLabel}</span>
+                  <span className="text-sm font-bold text-slate-500">
+                    (#{rankInfo.rank} of {rankInfo.totalCount})
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  {rankInfo.rank === 1 ? (
+                    <span className="font-semibold text-amber-900">
+                      🥇 Outstanding! You currently hold the <strong>1st Highest</strong> score in the entire cluster!
+                    </span>
+                  ) : rankInfo.rank === 2 ? (
+                    <span className="font-semibold text-slate-800">
+                      🥈 Superb standing! You hold the <strong>2nd Highest</strong> score in the cluster — only 1 student scored higher.
+                    </span>
+                  ) : rankInfo.rank === 3 ? (
+                    <span className="font-semibold text-amber-900">
+                      🥉 Excellent performance! You hold the <strong>3rd Highest</strong> podium score in the cluster.
+                    </span>
+                  ) : (
+                    <span>
+                      You are currently ranked <strong className="text-slate-900 font-black">{rankInfo.rankLabel}</strong> ({rankInfo.higherScoresCount} student{rankInfo.higherScoresCount === 1 ? '' : 's'} scored higher than your {exam.score}/100).
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Dynamic real-time update note */}
+          <div className="mt-4 pt-3 border-t border-amber-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div className="flex items-center space-x-1.5 text-amber-900">
+              <TrendingUp className="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>
+                <strong>Dynamic live updates:</strong> If other students take this exam and score higher than your {exam.score}/100, your rank will adjust lower automatically.
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-500 font-mono shrink-0">
+              Top Score on Test: <strong className="text-slate-900">{rankInfo.topScore}/100</strong>
+            </div>
+          </div>
+        </div>
+
+        {/* Pacing Velocity & Time Cadence Diagnostic */}
+        <div className="mt-6 p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div className="flex items-center space-x-2.5">
+              <div
+                className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                  pacingRating === 'Ahead of Pace'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : pacingRating === 'Overtime Risk'
+                    ? 'bg-rose-100 text-rose-700'
+                    : 'bg-blue-100 text-blue-700'
+                }`}
+              >
+                <Gauge className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                  Pacing Velocity & Cadence Diagnostic
+                </h3>
+                <p className="text-xs text-slate-500">
+                  DECA Competition Benchmark: 42 seconds / question (70 min for 100 questions)
+                </p>
+              </div>
+            </div>
+
+            <span
+              className={`text-xs font-bold px-3 py-1 rounded-full border self-start sm:self-auto ${
+                pacingRating === 'Ahead of Pace'
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                  : pacingRating === 'Overtime Risk'
+                  ? 'bg-rose-50 text-rose-800 border-rose-300'
+                  : 'bg-blue-50 text-blue-800 border-blue-200'
+              }`}
+            >
+              {pacingRating === 'Ahead of Pace'
+                ? `⚡ Ahead of Pace (+${bufferMinutes}m buffer)`
+                : pacingRating === 'Overtime Risk'
+                ? `⚠️ Overtime Risk (${bufferMinutes}m deficit)`
+                : '🎯 Optimal Competition Cadence'}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Speedometer stat */}
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                Average Speed
+              </span>
+              <div className="text-3xl font-black font-mono text-slate-900">
+                {avgPace}
+                <span className="text-sm font-medium text-slate-500 ml-1">s/Q</span>
+              </div>
+              <span className="text-[11px] text-slate-500 mt-1 block">
+                Target: {targetPace}s / question
+              </span>
+            </div>
+
+            {/* Buffer / Review window */}
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                Review Buffer
+              </span>
+              <div
+                className={`text-3xl font-black font-mono ${
+                  bufferMinutes >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                }`}
+              >
+                {bufferMinutes >= 0 ? `+${bufferMinutes}m` : `${bufferMinutes}m`}
+              </div>
+              <span className="text-[11px] text-slate-500 mt-1 block">
+                {bufferMinutes >= 0 ? 'Spare time left to review' : 'Time deficit vs 70-min limit'}
+              </span>
+            </div>
+
+            {/* Lingering Questions */}
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                Lingering Questions (&gt;60s)
+              </span>
+              <div
+                className={`text-3xl font-black font-mono ${
+                  lingeringQuestionsCount > 0 ? 'text-amber-600' : 'text-emerald-600'
+                }`}
+              >
+                {lingeringQuestionsCount}
+              </div>
+              <span className="text-[11px] text-slate-500 mt-1 block">
+                {lingeringQuestionsCount > 0
+                  ? 'Questions where you got stuck'
+                  : 'Great flow — no severe stalls'}
+              </span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start space-x-2.5">
+            <Timer className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+            <p className="leading-relaxed">
+              <strong>DECA Strategy Tip:</strong> At ICDC and State, top scorers maintain a steady 35–42s pace so they have 5 to 10 minutes at the end to revisit flagged calculation or legal questions without rushing.
+            </p>
           </div>
         </div>
 
@@ -264,6 +489,115 @@ export const ExamResults: React.FC<ExamResultsProps> = ({
         </div>
       </div>
 
+      {/* Targeted Mastery & Weak Area Re-Test Section */}
+      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-800/60 pb-5 mb-6">
+          <div>
+            <div className="flex items-center space-x-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+              <Sparkles className="w-4 h-4" />
+              <span>Targeted Retention • Post-Exam Drills</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              Target Your Weak Areas
+            </h2>
+            <p className="text-xs text-indigo-200 mt-1 max-w-xl">
+              Don't spend another 70 minutes retaking questions you already know. Retest the exact concepts you missed to turn weak spots into podium points.
+            </p>
+          </div>
+
+          {onOpenResources && (
+            <button
+              onClick={onOpenResources}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition self-start sm:self-auto"
+            >
+              <BookOpen className="w-4 h-4 text-amber-400" />
+              <span>Study Resources & Formulas</span>
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Action 1: Retest Missed Questions */}
+          {missedQuestions.length > 0 ? (
+            <div className="p-5 rounded-2xl bg-white/10 border border-white/10 flex flex-col justify-between hover:bg-white/15 transition">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-rose-300 flex items-center space-x-1.5">
+                    <XCircle className="w-4 h-4" />
+                    <span>Missed Questions Drill</span>
+                  </span>
+                  <span className="text-xs font-mono bg-rose-500/20 text-rose-200 px-2.5 py-0.5 rounded-full border border-rose-400/30 font-bold">
+                    {missedQuestions.length} Questions Missed
+                  </span>
+                </div>
+                <h3 className="font-black text-white text-base mb-1">
+                  Retest Only Missed Questions
+                </h3>
+                <p className="text-xs text-indigo-200 leading-relaxed mb-4">
+                  Take a rapid sprint test containing solely the {missedQuestions.length} questions you missed on this exam to solidify the correct concepts.
+                </p>
+              </div>
+
+              <button
+                id="btn-retest-missed-results"
+                onClick={() => onRetestMissed && onRetestMissed(exam)}
+                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center space-x-2 transition shadow-md"
+              >
+                <span>Launch Missed Questions Drill ({missedQuestions.length} Qs)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-400/20 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center space-x-1.5 mb-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Flawless 100/100 Accuracy</span>
+                </span>
+                <h3 className="font-black text-white text-base mb-1">
+                  All Questions Answered Correctly!
+                </h3>
+                <p className="text-xs text-emerald-200">
+                  Incredible performance! You got every single question right on this official simulation.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Action 2: Drill Lowest Instructional Area */}
+          {lowestArea && (
+            <div className="p-5 rounded-2xl bg-white/10 border border-white/10 flex flex-col justify-between hover:bg-white/15 transition">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center space-x-1.5">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>Lowest Scoring Area</span>
+                  </span>
+                  <span className="text-xs font-mono bg-amber-500/20 text-amber-200 px-2.5 py-0.5 rounded-full border border-amber-400/30 font-bold">
+                    {lowestArea.percentage}% Accuracy
+                  </span>
+                </div>
+                <h3 className="font-black text-white text-base mb-1 truncate" title={lowestArea.area}>
+                  Drill {lowestArea.area}
+                </h3>
+                <p className="text-xs text-indigo-200 leading-relaxed mb-4">
+                  Target your lowest-scoring competency area with a focused 15-question sprint to boost your score where it counts.
+                </p>
+              </div>
+
+              <button
+                id="btn-drill-weakest-area"
+                onClick={() => onRetestWeakArea && onRetestWeakArea(lowestArea.area)}
+                className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center space-x-2 transition shadow-md"
+              >
+                <span>Drill {lowestArea.area.split(' ')[0]} ({Math.min(15, lowestArea.total)} Qs)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Instructional Area Breakdown */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
         <h2 className="text-lg font-bold text-slate-900 mb-1">
@@ -279,36 +613,52 @@ export const ExamResults: React.FC<ExamResultsProps> = ({
             const isLow = ab.percentage < 65;
 
             return (
-              <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-xs font-bold text-slate-800 truncate max-w-[240px]">
-                    {ab.area}
-                  </span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs text-slate-500">
-                      {ab.correct}/{ab.total}
+              <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-xs font-bold text-slate-800 truncate max-w-[200px]">
+                      {ab.area}
                     </span>
-                    <span
-                      className={`text-xs font-bold px-2 py-0.5 rounded-md ${
-                        isHigh
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : isLow
-                          ? 'bg-rose-100 text-rose-800'
-                          : 'bg-blue-100 text-blue-800'
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-slate-500">
+                        {ab.correct}/{ab.total}
+                      </span>
+                      <span
+                        className={`text-xs font-bold px-2 py-0.5 rounded-md ${
+                          isHigh
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : isLow
+                            ? 'bg-rose-100 text-rose-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}
+                      >
+                        {ab.percentage}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-2.5">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        isHigh ? 'bg-emerald-500' : isLow ? 'bg-rose-500' : 'bg-blue-600'
                       }`}
-                    >
-                      {ab.percentage}%
-                    </span>
+                      style={{ width: `${ab.percentage}%` }}
+                    />
                   </div>
                 </div>
 
-                <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      isHigh ? 'bg-emerald-500' : isLow ? 'bg-rose-500' : 'bg-blue-600'
-                    }`}
-                    style={{ width: `${ab.percentage}%` }}
-                  />
+                <div className="flex items-center justify-between pt-1 text-[11px]">
+                  <span className="text-slate-400">
+                    {isLow ? '⚠️ Priority focus' : isHigh ? '✓ Mastered' : 'Moderate'}
+                  </span>
+                  {onRetestWeakArea && (
+                    <button
+                      onClick={() => onRetestWeakArea(ab.area)}
+                      className="text-blue-600 hover:text-blue-700 font-bold hover:underline"
+                    >
+                      Drill Area →
+                    </button>
+                  )}
                 </div>
               </div>
             );

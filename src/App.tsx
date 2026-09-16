@@ -12,7 +12,7 @@ import {
   getOfficialExam1327Questions,
   getQuickSprintQuestions,
 } from './data/questionPool';
-import { Navbar } from './components/Navbar';
+import { Navbar, ActiveNavView } from './components/Navbar';
 import { AuthModal } from './components/AuthModal';
 import { LandingHero } from './components/LandingHero';
 import { TakeExamLanding } from './components/TakeExamLanding';
@@ -22,6 +22,7 @@ import { StudentDashboard } from './components/StudentDashboard';
 import { ClusterLeaderDashboard } from './components/ClusterLeaderDashboard';
 import { QuestionBankView } from './components/QuestionBankView';
 import { ClusterCalendarView } from './components/ClusterCalendarView';
+import { ResourcesView } from './components/ResourcesView';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(() => getCurrentUser());
@@ -29,9 +30,9 @@ export default function App() {
   const [authDefaultRole, setAuthDefaultRole] = useState<'student' | 'cluster_leader'>('student');
 
   // Navigation views
-  const [activeView, setActiveView] = useState<
-    'take_exam' | 'student_dashboard' | 'leader_roster' | 'question_bank' | 'create_tests' | 'cluster_calendar'
-  >(() => (currentUser?.role === 'cluster_leader' ? 'leader_roster' : 'take_exam'));
+  const [activeView, setActiveView] = useState<ActiveNavView>(() =>
+    currentUser?.role === 'cluster_leader' ? 'leader_roster' : 'take_exam'
+  );
 
   // Active Exam state
   const [isExamActive, setIsExamActive] = useState(false);
@@ -143,6 +144,34 @@ export default function App() {
     setIsExamActive(true);
   };
 
+  // Launch Missed Questions Retest Drill
+  const handleStartMissedQuestionsDrill = (exam: CompletedExam) => {
+    ensureStudentSession();
+    const missed = exam.questions.filter(q => exam.answers[q.id] !== q.correctAnswer);
+    if (missed.length === 0) return;
+    setActiveQuestions(missed);
+    setActiveExamTitle(`Missed Questions Retest (${missed.length} Qs) • ${exam.examTitle}`);
+    const timeLimit = Math.max(5, Math.ceil((missed.length * 45) / 60));
+    setActiveExamTimeLimit(timeLimit);
+    setViewingResult(null);
+    setIsExamActive(true);
+  };
+
+  // Launch Targeted Weak Area Drill
+  const handleStartWeakAreaDrill = (area: string, count: number = 15) => {
+    ensureStudentSession();
+    const pool = getCachedOrGeneratedPool();
+    const areaQs = pool.filter(q => q.instructionalArea === area);
+    const selected = areaQs.slice(0, Math.min(count, areaQs.length));
+    if (selected.length === 0) return;
+    setActiveQuestions(selected);
+    setActiveExamTitle(`Targeted Mastery Drill: ${area} (${selected.length} Qs)`);
+    const timeLimit = Math.max(8, Math.ceil((selected.length * 45) / 60));
+    setActiveExamTimeLimit(timeLimit);
+    setViewingResult(null);
+    setIsExamActive(true);
+  };
+
   // When student finishes and submits exam
   const handleCompleteExam = (completed: CompletedExam) => {
     saveCompletedExam(completed);
@@ -204,10 +233,23 @@ export default function App() {
               }
             }}
             onRetakeExam={handleStartStandardExam}
+            onRetestMissed={handleStartMissedQuestionsDrill}
+            onRetestWeakArea={handleStartWeakAreaDrill}
+            onOpenResources={() => {
+              setViewingResult(null);
+              setActiveView('resources');
+            }}
           />
         ) : activeView === 'cluster_calendar' ? (
           /* Cluster Calendar (2026 - Feb 2027) & Google Slides Hub */
           <ClusterCalendarView
+            currentUser={currentUser}
+            onOpenAuthModal={() => handleOpenAuth('cluster_leader')}
+            onStartPracticeExam={handleStartStandardExam}
+          />
+        ) : activeView === 'resources' ? (
+          /* DECA Study Resources, Formula Sheets & Vocabulary Hub */
+          <ResourcesView
             currentUser={currentUser}
             onOpenAuthModal={() => handleOpenAuth('cluster_leader')}
             onStartPracticeExam={handleStartStandardExam}
@@ -265,6 +307,9 @@ export default function App() {
                 currentUser={currentUser}
                 onStartExam={handleStartStandardExam}
                 onViewExamDetails={exam => setViewingResult(exam)}
+                onRetestMissed={handleStartMissedQuestionsDrill}
+                onRetestWeakArea={handleStartWeakAreaDrill}
+                onNavigateToResources={() => setActiveView('resources')}
               />
             )}
           </div>
@@ -277,6 +322,7 @@ export default function App() {
               onStartRandomExam={handleStartStandardExam}
               onStartSprintExam={handleStartSprintExam}
               onOpenCalendar={() => setActiveView('cluster_calendar')}
+              onOpenResources={() => setActiveView('resources')}
             />
           </div>
         )}
